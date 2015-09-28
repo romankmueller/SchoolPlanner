@@ -1,0 +1,70 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="ch.bzs_surselva.schoolplanner.AboutActivity"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@mipmap/ic_launcher" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title"
+        android:id="@+id/textViewTitleTitle"
+        style="@style/TextAppearance.AppCompat.Small" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:id="@+id/textViewTitle"
+        style="@style/TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/version"
+        android:id="@+id/textViewVersionTitle"
+        style="@style/TextAppearance.AppCompat.Small" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewVersion"
+        style="@style/TextAppearance.AppCompat.Medium" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/authors"
+        android:id="@+id/textViewAuthorTitle"
+        style="@style/TextAppearance.AppCompat.Small" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/author_names"
+        android:id="@+id/textViewAuthor"
+        style="@style/TextAppearance.AppCompat.Medium" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/support"
+        android:id="@+id/buttonSupport"
+        android:onClick="buttonSupportOnClick" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/review"
+        android:id="@+id/buttonReview"
+        android:onClick="buttonReviewOnClick" />
+</LinearLayout>
