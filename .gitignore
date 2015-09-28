@@ -9,14 +9,10 @@
 /Server/Bzs.Portable/obj
 /Server/Bzs.Server/bin
 /Server/Bzs.Server/obj
-/Server/Bzs.Server.CloudService/bin
-/Server/Bzs.Server.CloudService/obj
 /Server/Bzs.Server.CloudServices/bin
 /Server/Bzs.Server.CloudServices/obj
 /Server/Bzs.Server.Database/bin/Debug
 /Server/Bzs.Server.Database/obj/Debug
-/Server/Bzs.Server.WebServices/bin
-/Server/Bzs.Server.WebServices/obj
 /Server/Bzs.Testing.UnitTests/bin/Debug
 /Server/Bzs.Testing.UnitTests/obj
 /Server/BZS Surselva.sln.DotSettings.user
@@ -24,8 +20,6 @@
 /Server/Bzs.Server.Database/Bzs.Server.Database.Azure.publish.xml
 /Server/Bzs.Server.Database/Bzs.Server.Database.sqlproj.user
 /Server/Bzs.Testing.UnitTests/App.config
-/Server/Bzs.Server.WebServices/Web.config
-/Server/Bzs.Server.WebServices/Bzs.Server.WebServices.csproj.user
 /Server/Bzs.Server.CloudServices/Bzs.Server.CloudServices.csproj.user
 /Server/Bzs.Server.CloudServices/Web.config
 /Server/Bzs.Server/App.config
