@@ -1,4 +1,4 @@
-﻿INSERT INTO [dbo].[account] ([id], [account], [password], [email], [moddate], [moduser]) VALUES ('FDB44E7C-AB09-4DF2-9CA9-C42D001E2957', 'test', 'test', 'roman.mueller@deltaworks.ch', GETDATE(), 'Administrator')
+﻿INSERT INTO [dbo].[account] ([id], [account], [password], [email], [moddate], [moduser]) VALUES ('FDB44E7C-AB09-4DF2-9CA9-C42D001E2957', 'test', 'test', '', GETDATE(), 'Administrator')
 GO
 
 INSERT INTO [dbo].[day] ([id], [order], [code], [caption], [moddate], [moduser]) VALUES ('49FA1196-56A6-45E1-92D5-869C192CB66C', 0, 'MO', 'Montag', GETDATE(), 'Administrator')
