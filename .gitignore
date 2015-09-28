@@ -17,7 +17,5 @@
 /Server/Bzs.Testing.UnitTests/obj
 /Server/BZS Surselva.sln.DotSettings.user
 /Server/BZS Surselva.v12.suo
-/Server/Bzs.Server.Database/Bzs.Server.Database.Azure.publish.xml
 /Server/Bzs.Server.Database/Bzs.Server.Database.sqlproj.user
 /Server/Bzs.Server.CloudServices/Bzs.Server.CloudServices.csproj.user
-/Server/Deployment/WebDeployPackage
