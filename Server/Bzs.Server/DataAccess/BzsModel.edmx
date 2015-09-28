@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="bzssurselvaModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="account">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="account" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="email" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="moddate" Type="datetime" Nullable="false" />
+          <Property Name="moduser" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="day">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="order" Type="int" Nullable="false" />
+          <Property Name="code" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="caption" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="moddate" Type="datetime" Nullable="false" />
+          <Property Name="moduser" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="lesson">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="accountid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="dayid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="fromdate" Type="datetime" Nullable="false" />
+          <Property Name="todate" Type="datetime" Nullable="false" />
+          <Property Name="subjectid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="teacher" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="room" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="remark" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="moddate" Type="datetime" Nullable="false" />
+          <Property Name="moduser" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="subject">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="code" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="caption" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="moddate" Type="datetime" Nullable="false" />
+          <Property Name="moduser" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="fk_lesson_account">
+          <End Role="account" Type="Self.account" Multiplicity="1" />
+          <End Role="lesson" Type="Self.lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="account">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lesson">
+              <PropertyRef Name="accountid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_lesson_day">
+          <End Role="day" Type="Self.day" Multiplicity="1" />
+          <End Role="lesson" Type="Self.lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="day">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lesson">
+              <PropertyRef Name="dayid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_lesson_subject">
+          <End Role="subject" Type="Self.subject" Multiplicity="1" />
+          <End Role="lesson" Type="Self.lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="subject">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="lesson">
+              <PropertyRef Name="subjectid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="bzssurselvaModelStoreContainer">
+          <EntitySet Name="account" EntityType="Self.account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="day" EntityType="Self.day" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="lesson" EntityType="Self.lesson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="subject" EntityType="Self.subject" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fk_lesson_account" Association="Self.fk_lesson_account">
+            <End Role="account" EntitySet="account" />
+            <End Role="lesson" EntitySet="lesson" />
+          </AssociationSet>
+          <AssociationSet Name="fk_lesson_day" Association="Self.fk_lesson_day">
+            <End Role="day" EntitySet="day" />
+            <End Role="lesson" EntitySet="lesson" />
+          </AssociationSet>
+          <AssociationSet Name="fk_lesson_subject" Association="Self.fk_lesson_subject">
+            <End Role="subject" EntitySet="subject" />
+            <End Role="lesson" EntitySet="lesson" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BzsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AccountEntity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Account" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ModDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModUser" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="LessonNavProp" Relationship="BzsModel.fk_lesson_account" FromRole="AccountEntity" ToRole="lesson" />
+        </EntityType>
+        <EntityContainer Name="BzsEntityContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AccountSet" EntityType="BzsModel.AccountEntity" />
+          <EntitySet Name="DaySet" EntityType="BzsModel.DayEntity" />
+          <EntitySet Name="LessonSet" EntityType="BzsModel.LessonEntity" />
+          <EntitySet Name="SubjectSet" EntityType="BzsModel.SubjectEntity" />
+          <AssociationSet Name="fk_lesson_account" Association="BzsModel.fk_lesson_account">
+            <End Role="AccountEntity" EntitySet="AccountSet" />
+            <End Role="lesson" EntitySet="LessonSet" />
+          </AssociationSet>
+          <AssociationSet Name="fk_lesson_day" Association="BzsModel.fk_lesson_day">
+            <End Role="day" EntitySet="DaySet" />
+            <End Role="lesson" EntitySet="LessonSet" />
+          </AssociationSet>
+          <AssociationSet Name="fk_lesson_subject" Association="BzsModel.fk_lesson_subject">
+            <End Role="subject" EntitySet="SubjectSet" />
+            <End Role="lesson" EntitySet="LessonSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="DayEntity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Order" Type="Int32" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="Caption" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModUser" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LessonNavProp" Relationship="BzsModel.fk_lesson_day" FromRole="day" ToRole="lesson" />
+        </EntityType>
+        <EntityType Name="LessonEntity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="AccountId" Type="Guid" Nullable="false" />
+          <Property Name="DayId" Type="Guid" Nullable="false" />
+          <Property Name="FromDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ToDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SubjectId" Type="Guid" Nullable="false" />
+          <Property Name="Teacher" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Room" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Remark" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ModDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModUser" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AccountNavProp" Relationship="BzsModel.fk_lesson_account" FromRole="lesson" ToRole="AccountEntity" />
+          <NavigationProperty Name="DayNavProp" Relationship="BzsModel.fk_lesson_day" FromRole="lesson" ToRole="day" />
+          <NavigationProperty Name="SubjectNavProp" Relationship="BzsModel.fk_lesson_subject" FromRole="lesson" ToRole="subject" />
+        </EntityType>
+        <EntityType Name="SubjectEntity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="Code" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Caption" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ModUser" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="LessonNavProp" Relationship="BzsModel.fk_lesson_subject" FromRole="subject" ToRole="lesson" />
+        </EntityType>
+        <Association Name="fk_lesson_account">
+          <End Type="BzsModel.AccountEntity" Role="AccountEntity" Multiplicity="1" />
+          <End Type="BzsModel.LessonEntity" Role="lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccountEntity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="lesson">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_lesson_day">
+          <End Type="BzsModel.DayEntity" Role="day" Multiplicity="1" />
+          <End Type="BzsModel.LessonEntity" Role="lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="day">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="lesson">
+              <PropertyRef Name="DayId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_lesson_subject">
+          <End Type="BzsModel.SubjectEntity" Role="subject" Multiplicity="1" />
+          <End Type="BzsModel.LessonEntity" Role="lesson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="subject">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="lesson">
+              <PropertyRef Name="SubjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="bzssurselvaModelStoreContainer" CdmEntityContainer="BzsEntityContainer">
+          <EntitySetMapping Name="AccountSet">
+            <EntityTypeMapping TypeName="BzsModel.AccountEntity">
+              <MappingFragment StoreEntitySet="account">
+                <ScalarProperty Name="Id" ColumnName="id" />
+                <ScalarProperty Name="Account" ColumnName="account" />
+                <ScalarProperty Name="Password" ColumnName="password" />
+                <ScalarProperty Name="Email" ColumnName="email" />
+                <ScalarProperty Name="ModDate" ColumnName="moddate" />
+                <ScalarProperty Name="ModUser" ColumnName="moduser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DaySet">
+            <EntityTypeMapping TypeName="BzsModel.DayEntity">
+              <MappingFragment StoreEntitySet="day">
+                <ScalarProperty Name="ModUser" ColumnName="moduser" />
+                <ScalarProperty Name="ModDate" ColumnName="moddate" />
+                <ScalarProperty Name="Caption" ColumnName="caption" />
+                <ScalarProperty Name="Code" ColumnName="code" />
+                <ScalarProperty Name="Order" ColumnName="order" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LessonSet">
+            <EntityTypeMapping TypeName="BzsModel.LessonEntity">
+              <MappingFragment StoreEntitySet="lesson">
+                <ScalarProperty Name="ModUser" ColumnName="moduser" />
+                <ScalarProperty Name="ModDate" ColumnName="moddate" />
+                <ScalarProperty Name="Remark" ColumnName="remark" />
+                <ScalarProperty Name="Room" ColumnName="room" />
+                <ScalarProperty Name="Teacher" ColumnName="teacher" />
+                <ScalarProperty Name="SubjectId" ColumnName="subjectid" />
+                <ScalarProperty Name="ToDate" ColumnName="todate" />
+                <ScalarProperty Name="FromDate" ColumnName="fromdate" />
+                <ScalarProperty Name="DayId" ColumnName="dayid" />
+                <ScalarProperty Name="AccountId" ColumnName="accountid" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubjectSet">
+            <EntityTypeMapping TypeName="BzsModel.SubjectEntity">
+              <MappingFragment StoreEntitySet="subject">
+                <ScalarProperty Name="ModUser" ColumnName="moduser" />
+                <ScalarProperty Name="ModDate" ColumnName="moddate" />
+                <ScalarProperty Name="Caption" ColumnName="caption" />
+                <ScalarProperty Name="Code" ColumnName="code" />
+                <ScalarProperty Name="Id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
