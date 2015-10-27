@@ -9,11 +9,6 @@ import java.security.InvalidParameterException;
 
 import javax.net.ssl.HttpsURLConnection;
 
-/**
- * Represents a request helper.
- * @author Roman Müller
- * @since 2015-09-13
- */
 public final class RequestHelper
 {
     public static HttpsURLConnection createRequest(String restService, String method)

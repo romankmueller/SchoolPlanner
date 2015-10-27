@@ -43,4 +43,7 @@
     <string name="teacher">Teacher</string>
     <string name="room">Room</string>
     <string name="remark">Remark</string>
+    <string name="title_activity_subject_edit">Edit Subject</string>
+    <string name="cc_subject">Subject</string>
+    <string name="cc_caption">Caption</string>
 </resources>

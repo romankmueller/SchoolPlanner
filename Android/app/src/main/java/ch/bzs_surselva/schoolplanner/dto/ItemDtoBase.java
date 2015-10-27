@@ -7,11 +7,29 @@ import java.util.UUID;
 
 public abstract class ItemDtoBase
 {
+    private static final String JsonId = "Id";
+
     private UUID id;
 
     protected ItemDtoBase()
     {
-        this.setId(UUID.randomUUID());
+        this.id = UUID.randomUUID();
+    }
+
+    protected ItemDtoBase(UUID id)
+    {
+        this.id = id;
+    }
+
+    protected ItemDtoBase(JSONObject json)
+    {
+        try
+        {
+            this.id = UUID.fromString(json.getString(JsonId));
+        }
+        catch (JSONException e)
+        {
+        }
     }
 
     public UUID getId()
@@ -19,17 +37,13 @@ public abstract class ItemDtoBase
         return this.id;
     }
 
-    public void setId(UUID id)
-    {
-        this.id = id;
-    }
-
     public JSONObject toJson()
     {
         JSONObject json = new JSONObject();
+
         try
         {
-            json.put("Id", this.getId());
+            json.put(JsonId, this.getId());
         }
         catch (JSONException e)
         {

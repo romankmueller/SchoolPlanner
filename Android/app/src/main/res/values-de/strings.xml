@@ -44,4 +44,7 @@
     <string name="teacher">Lehrer</string>
     <string name="room">Raum</string>
     <string name="remark">Bemerkung</string>
+    <string name="title_activity_subject_edit">Fach bearbeiten</string>
+    <string name="cc_subject">Fach</string>
+    <string name="cc_caption">Bezeichnung</string>
 </resources>

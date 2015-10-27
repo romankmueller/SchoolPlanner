@@ -55,6 +55,11 @@
             android:label="@string/title_activity_lesson"
             android:parentActivityName=".TimetableActivity" >
         </activity>
+        <activity
+            android:name=".SubjectEditActivity"
+            android:label="@string/title_activity_subject_edit"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
