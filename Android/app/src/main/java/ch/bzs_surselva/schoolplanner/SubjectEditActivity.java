@@ -3,6 +3,7 @@ package ch.bzs_surselva.schoolplanner;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
+import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -29,6 +31,7 @@ import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 public class SubjectEditActivity extends AppCompatActivity
 {
     private SubjectEditDto model;
+    private LoadTask loadTask;
     private SaveTask saveTask;
     private EditText editTextCode;
     private EditText editTextCaption;
@@ -41,6 +44,18 @@ public class SubjectEditActivity extends AppCompatActivity
 
         this.editTextCode = (EditText) this.findViewById(R.id.editTextCode);
         this.editTextCaption = (EditText) this.findViewById(R.id.editTextCaption);
+
+        // Lödt das Fach, sofern nötig.
+        Intent intent = this.getIntent();
+        if (intent.hasExtra("Id"))
+        {
+            String id = intent.getStringExtra("Id");
+            if (id != null)
+            {
+                this.loadTask = new LoadTask(UUID.fromString(id));
+                this.loadTask.execute((Void) null);
+            }
+        }
     }
 
     @Override
@@ -64,22 +79,47 @@ public class SubjectEditActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void applyChanges()
+    private SubjectEditDto applyChanges(SubjectEditDto modelToApply)
     {
-        if (this.model == null)
-        {
-            this.model = new SubjectEditDto();
-        }
-
-        this.model.setCode(this.editTextCode.getText().toString());
-        this.model.setCaption(this.editTextCaption.getText().toString());
+        modelToApply.setCode(this.editTextCode.getText().toString());
+        modelToApply.setCaption(this.editTextCaption.getText().toString());
+        return modelToApply;
     }
 
     private void saveChanges()
     {
-        this.applyChanges();
-        this.saveTask = new SaveTask(this.model);
+        SubjectEditDto itemToSave;
+        if (this.model == null)
+        {
+            itemToSave = new SubjectEditDto();
+        }
+        else
+        {
+            itemToSave = this.model;
+        }
+
+
+        itemToSave = this.applyChanges(itemToSave);
+        if (this.model == null)
+        {
+            this.saveTask = new SaveTask(itemToSave, "I");
+        }
+        else
+        {
+            this.saveTask = new SaveTask(itemToSave, "U");
+        }
+
         this.saveTask.execute((Void) null);
+    }
+
+    private void didLoadModel(SubjectEditDto loadedItem)
+    {
+        this.model = loadedItem;
+        if (this.model != null)
+        {
+            this.editTextCode.setText(this.model.getCode());
+            this.editTextCaption.setText(this.model.getCaption());
+        }
     }
 
     private void displaySaveAlert(String alertMessage)
@@ -101,15 +141,15 @@ public class SubjectEditActivity extends AppCompatActivity
                 .show();
     }
 
-    public class SaveTask extends AsyncTask<Void, Void, Boolean>
+    public class LoadTask extends AsyncTask<Void, Void, Boolean>
     {
-        private final SubjectEditDto itemToSave;
+        private final UUID idToLoad;
         private ProgressDialog dialog;
         private String content;
 
-        public SaveTask(SubjectEditDto itemToSave)
+        public LoadTask(UUID idToLoad)
         {
-            this.itemToSave = itemToSave;
+            this.idToLoad = idToLoad;
             this.dialog = new ProgressDialog(SubjectEditActivity.this);
         }
 
@@ -125,7 +165,114 @@ public class SubjectEditActivity extends AppCompatActivity
         {
             try
             {
-                HttpsURLConnection connection = RequestHelper.createRequest("SaveSubject", "PUT");
+                HttpsURLConnection connection = RequestHelper.createRequest("GetSubject/" + this.idToLoad.toString(), "GET");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.connect();
+                int status = connection.getResponseCode();
+                if (status == 200 || status == 201)
+                {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null)
+                    {
+                        sb.append(line).append("\n");
+                    }
+
+                    br.close();
+                    this.content = sb.toString();
+                    return true;
+                }
+            }
+            catch (MalformedURLException e)
+            {
+                return false;
+            }
+            catch (NullPointerException e)
+            {
+                return false;
+            }
+            catch (IOException e)
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success)
+        {
+            loadTask = null;
+            this.dialog.dismiss();
+
+            if (success)
+            {
+                JSONObject json = null;
+                try
+                {
+                     json = new JSONObject(this.content);
+                }
+                catch (JSONException e)
+                {
+                }
+
+                if (json != null)
+                {
+                    didLoadModel(new SubjectEditDto(json));
+                }
+            }
+        }
+
+        @Override
+        protected void onCancelled()
+        {
+            loadTask = null;
+            this.dialog.dismiss();
+        }
+    }
+
+    public class SaveTask extends AsyncTask<Void, Void, Boolean>
+    {
+        private final SubjectEditDto itemToSave;
+        private final String insertUpdate;
+        private ProgressDialog dialog;
+        private String content;
+
+        public SaveTask(SubjectEditDto itemToSave, String insertUpdate)
+        {
+            this.itemToSave = itemToSave;
+            if (!insertUpdate.equals("I") && !insertUpdate.equals("U"))
+            {
+                throw new IllegalArgumentException("insertUpdate is not 'I' or 'U'.");
+            }
+
+            this.insertUpdate = insertUpdate;
+            this.dialog = new ProgressDialog(SubjectEditActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            this.dialog.setMessage(getString(R.string.please_wait));
+            this.dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            String service = "InsertSubject";
+            String method = "PUT";
+            if (insertUpdate == "U")
+            {
+                service = "UpdateSubject";
+                method = "POST";
+            }
+
+            try
+            {
+                HttpsURLConnection connection = RequestHelper.createRequest(service, method);
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
                 connection.setDoOutput(true);

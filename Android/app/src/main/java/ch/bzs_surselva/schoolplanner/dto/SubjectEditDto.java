@@ -31,6 +31,7 @@ public final class SubjectEditDto extends ItemDtoBase
 
     public SubjectEditDto(JSONObject json)
     {
+        super(json);
         try
         {
             this.setCode(json.getString(JsonCode));

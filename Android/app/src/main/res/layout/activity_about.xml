@@ -67,4 +67,10 @@
         android:text="@string/review"
         android:id="@+id/buttonReview"
         android:onClick="buttonReviewOnClick" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:text="@string/action_settings"/>
 </LinearLayout>

@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu (Menu menu)
     {
-        menu.getItem(0).setVisible(CredentialHelper.getAccount() != null);
-        menu.getItem(1).setVisible(CredentialHelper.getAccount() != null);
+        //menu.getItem(0).setVisible(CredentialHelper.getAccount() != null);
+        //menu.getItem(1).setVisible(CredentialHelper.getAccount() != null);
         return true;
     }
 
@@ -70,6 +70,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
+
+        if (id == R.id.action_masterdata)
+        {
+            Intent intent = new Intent(this, MasterDataActivity.class);
+            this.startActivity(intent);
+            return true;
+        }
 
         // Wenn auf den Abmelden-Eintrag geklickt wurde, dann löschen wir die Anmeldeinfos.
         if (id == R.id.action_logoff)

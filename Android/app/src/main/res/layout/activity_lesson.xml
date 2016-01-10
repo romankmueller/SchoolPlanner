@@ -21,7 +21,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerDay"
-                android:spinnerMode="dropdown" />
+                android:spinnerMode="dropdown"
+                android:prompt="@string/cc_day"/>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -59,6 +60,12 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/editTextSubject"
                 android:hint="@string/subject" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerSubject"
+                android:prompt="@string/subject"/>
 
             <EditText
                 android:layout_width="match_parent"

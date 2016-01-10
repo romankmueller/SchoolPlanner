@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <string name="app_name">BZS Surselva</string>
     <string name="action_settings">Einstellungen</string>
@@ -46,5 +47,11 @@
     <string name="remark">Bemerkung</string>
     <string name="title_activity_subject_edit">Fach bearbeiten</string>
     <string name="cc_subject">Fach</string>
+    <string name="cc_subjects">Fächer</string>
     <string name="cc_caption">Bezeichnung</string>
+    <string name="cc_day">Tag</string>
+    <string name="cc_no">Nein</string>
+    <string name="cc_yes">Ja</string>
+    <string name="cc_would_you_like_to_delete_the_subject">Möchten Sie das Fach löschen?</string>
+    <string name="cc_master_data">Stammdaten</string>
 </resources>

@@ -58,7 +58,20 @@
         <activity
             android:name=".SubjectEditActivity"
             android:label="@string/title_activity_subject_edit"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:parentActivityName=".SubjectOverviewActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.bzs_surselva.schoolplanner.SubjectOverviewActivity" />
+        </activity>
+        <activity
+            android:name=".SubjectOverviewActivity"
+            android:label=""
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.bzs_surselva.schoolplanner.MainActivity" />
+        </activity>
+        <activity android:name=".MasterDataActivity" >
         </activity>
     </application>
 

@@ -7,4 +7,8 @@
     tools:context="ch.bzs_surselva.schoolplanner.TimetableActivity"
     android:orientation="vertical">
 
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/listViewLesson"/>
 </LinearLayout>

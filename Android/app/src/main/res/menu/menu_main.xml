@@ -4,6 +4,10 @@
 
     <!--<item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" /> -->
+    <item android:id="@+id/action_masterdata"
+          android:title="@string/cc_master_data"
+          android:orderInCategory="100"
+          app:showAsAction="never" />
     <item android:id="@+id/action_logoff" android:title="@string/action_logoff"
         android:orderInCategory="200" app:showAsAction="never" />
     <item android:id="@+id/action_about" android:title="@string/action_about"

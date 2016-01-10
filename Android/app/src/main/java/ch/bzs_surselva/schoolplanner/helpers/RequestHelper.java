@@ -13,7 +13,7 @@ public final class RequestHelper
 {
     public static HttpsURLConnection createRequest(String restService, String method)
     {
-        if (!method.equals("GET") && !method.equals("PUT") && !method.equals("POST"))
+        if (!method.equals("GET") && !method.equals("PUT") && !method.equals("POST") && !method.equals("DELETE"))
         {
             throw new InvalidParameterException("The method must be of type 'GET', 'PUT' or 'POST'.");
         }
