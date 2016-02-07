@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, MasterDataActivity.class);
             this.startActivity(intent);
             return true;
+            //Test
         }
 
         // Wenn auf den Abmelden-Eintrag geklickt wurde, dann löschen wir die Anmeldeinfos.
