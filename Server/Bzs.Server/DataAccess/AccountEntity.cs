@@ -18,6 +18,9 @@ namespace Bzs.Server.DataAccess
         public AccountEntity()
         {
             this.LessonNavProp = new HashSet<LessonEntity>();
+            this.RoomNavProp = new HashSet<RoomEntity>();
+            this.SubjectNavProp = new HashSet<SubjectEntity>();
+            this.TeacherNavProp = new HashSet<TeacherEntity>();
         }
     
         public System.Guid Id { get; set; }
@@ -29,5 +32,11 @@ namespace Bzs.Server.DataAccess
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LessonEntity> LessonNavProp { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RoomEntity> RoomNavProp { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<SubjectEntity> SubjectNavProp { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TeacherEntity> TeacherNavProp { get; set; }
     }
 }

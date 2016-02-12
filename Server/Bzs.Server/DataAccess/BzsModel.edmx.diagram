@@ -12,6 +12,13 @@
         <AssociationConnector Association="BzsModel.fk_lesson_account" />
         <AssociationConnector Association="BzsModel.fk_lesson_day" />
         <AssociationConnector Association="BzsModel.fk_lesson_subject" />
+        <EntityTypeShape EntityType="BzsModel.RoomEntity" Width="1.5" PointX="3" PointY="10.75" />
+        <EntityTypeShape EntityType="BzsModel.TeacherEntity" Width="1.5" PointX="3" PointY="7.5" />
+        <AssociationConnector Association="BzsModel.fk_room_account" />
+        <AssociationConnector Association="BzsModel.fk_subject_account" />
+        <AssociationConnector Association="BzsModel.fk_teacher_account" />
+        <AssociationConnector Association="BzsModel.fk_lesson_room" />
+        <AssociationConnector Association="BzsModel.fk_lesson_teacher" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

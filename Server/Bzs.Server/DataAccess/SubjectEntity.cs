@@ -25,8 +25,10 @@ namespace Bzs.Server.DataAccess
         public string Caption { get; set; }
         public System.DateTime ModDate { get; set; }
         public string ModUser { get; set; }
+        public Nullable<System.Guid> AccountId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<LessonEntity> LessonNavProp { get; set; }
+        public virtual AccountEntity AccountNavProp { get; set; }
     }
 }

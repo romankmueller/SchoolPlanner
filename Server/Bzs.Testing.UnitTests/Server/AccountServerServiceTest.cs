@@ -89,6 +89,7 @@ namespace Bzs.Server
         /// <summary>
         /// Tests the retrieval of the credentials.
         /// </summary>
+        [Ignore]
         [TestMethod]
         public void RetrieveCredentials_ValidEmail()
         {

@@ -54,16 +54,16 @@ namespace Bzs.Portable.DataTransferObjects.Lesson
         public string SubjectCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the teacher.
+        /// Gets or sets the teacher identifier.
         /// </summary>
         [DataMember]
-        public string Teacher { get; set; }
+        public Guid? TeacherId { get; set; }
 
         /// <summary>
-        /// Gets or sets the room.
+        /// Gets or sets the room identifier.
         /// </summary>
         [DataMember]
-        public string Room { get; set; }
+        public Guid? RoomId { get; set; }
 
         /// <summary>
         /// Gets or sets the remark.

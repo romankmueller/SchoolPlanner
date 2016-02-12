@@ -22,13 +22,14 @@ namespace Bzs.Server.ServerService
         /// <summary>
         /// Returns the subject lookup data.
         /// </summary>
-        /// <returns></returns>
-        public List<SubjectLookupDto> GetSubjectLookup()
+        /// <param name="accountId">The account identifier.</param>
+        /// <returns>The subject lookup data.</returns>
+        public List<SubjectLookupDto> GetSubjectLookup(Guid accountId)
         {
             List<SubjectLookupDto> data;
             using (BzsEntityContainer ctx = this.CreateContainer())
             {
-                data = ctx.SubjectSet.Select(f => new SubjectLookupDto
+                data = ctx.SubjectSet.Where(f => f.AccountId == null || f.AccountId == accountId).Select(f => new SubjectLookupDto
                 {
                     Id = f.Id,
                     Code = f.Code,
@@ -39,27 +40,32 @@ namespace Bzs.Server.ServerService
             return data;
         }
 
-        public ResultDto InsertUpdateSubject(SubjectEditDto itemToSave)
+        /// <summary>
+        /// Inserts a subject.
+        /// </summary>
+        /// <param name="itemToSave">The item to save.</param>
+        /// <param name="accountId">The account identifier.</param>
+        /// <returns>The result.</returns>
+        public ResultDto InsertSubject(SubjectEditDto itemToSave, Guid accountId)
         {
             ResultDto result = new ResultDto();
             using (BzsEntityContainer ctx = this.CreateContainer())
             {
                 SubjectEntity entity = ctx.SubjectSet.FirstOrDefault(f => f.Id == itemToSave.Id);
-                if (entity == null)
+                if (entity != null)
                 {
-                    entity = new SubjectEntity();
-                    entity.Id = itemToSave.Id;
-                    entity.Code = itemToSave.Code;
-                    entity.Caption = itemToSave.Caption;
-                    entity.ModDate = DateTime.Now;
-                    entity.ModUser = Environment.UserName;
-                    ctx.SubjectSet.Add(entity);
+                    result.Error = "ERR-SUBJECT-ALREADY-EXISTS";
+                    return result;
                 }
 
+                entity = new SubjectEntity();
+                entity.Id = itemToSave.Id;
+                entity.AccountId = accountId;
                 entity.Code = itemToSave.Code;
                 entity.Caption = itemToSave.Caption;
                 entity.ModDate = DateTime.Now;
                 entity.ModUser = Environment.UserName;
+                ctx.SubjectSet.Add(entity);
 
                 ctx.SaveChanges();
                 result.Success = true;
@@ -69,26 +75,83 @@ namespace Bzs.Server.ServerService
         }
 
         /// <summary>
-        /// Deletes the subject.
+        /// Updates a subject.
+        /// </summary>
+        /// <param name="itemToSave">The item to save.</param>
+        /// <param name="accountId">The account identifier.</param>
+        /// <returns>The result.</returns>
+        public ResultDto UpdateSubject(SubjectEditDto itemToSave, Guid? accountId)
+        {
+            ResultDto result = new ResultDto();
+            using (BzsEntityContainer ctx = this.CreateContainer())
+            {
+                SubjectEntity entity = ctx.SubjectSet.FirstOrDefault(f => f.Id == itemToSave.Id);
+                if (entity == null)
+                {
+                    result.Error = "ERR-SUBJECT-NOT-EXISTS";
+                    return result;
+                }
+
+                if (entity.AccountId == null || entity.AccountId != accountId)
+                {
+                    result.Error = "ERR-SUBJECT-ACCOUNT-INVALID";
+                    return result;
+                }
+
+                entity.Code = itemToSave.Code;
+                entity.Caption = itemToSave.Caption;
+                entity.ModDate = DateTime.Now;
+                entity.ModUser = Environment.UserName;
+                ctx.SubjectSet.Add(entity);
+
+                ctx.SaveChanges();
+                result.Success = true;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Deletes a subject.
         /// </summary>
         /// <param name="id">The subject identifier.</param>
+        /// <param name="accountId">The account identifier.</param>
         /// <returns>The result.</returns>
-        public ResultDto DeleteSubject(Guid id)
+        public ResultDto DeleteSubject(Guid id, Guid accountId)
         {
             ResultDto result = new ResultDto();
             using (BzsEntityContainer ctx = this.CreateContainer())
             {
                 SubjectEntity entity = ctx.SubjectSet.FirstOrDefault(f => f.Id == id);
-                if (entity != null && !entity.LessonNavProp.Any())
+                if (entity == null)
                 {
-                    ctx.SubjectSet.Remove(entity);
-
-                    ctx.SaveChanges();
-                    result.Success = true;
+                    result.Error = "ERR-SUBJECT-NOT-EXISTS";
+                    return result;
                 }
-            }
 
-            return result;
+                if (entity.AccountId == null)
+                {
+                    result.Error = "ERR-SUBJECT-ACCOUNT-INDEPENDENT";
+                    return result;
+                }
+
+                if (entity.AccountId != accountId)
+                {
+                    result.Error = "ERR-SUBJECT-ACCOUNT-INVALID";
+                    return result;
+                }
+
+                if (entity.LessonNavProp.Any())
+                {
+                    result.Error = "ERR-SUBJECT-USED";
+                    return result;
+                }
+
+                ctx.SubjectSet.Remove(entity);
+                ctx.SaveChanges();
+                result.Success = true;
+                return result;
+            }
         }
     }
 }

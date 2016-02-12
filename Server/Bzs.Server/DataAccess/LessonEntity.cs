@@ -20,14 +20,16 @@ namespace Bzs.Server.DataAccess
         public System.DateTime FromDate { get; set; }
         public System.DateTime ToDate { get; set; }
         public System.Guid SubjectId { get; set; }
-        public string Teacher { get; set; }
-        public string Room { get; set; }
         public string Remark { get; set; }
         public System.DateTime ModDate { get; set; }
         public string ModUser { get; set; }
+        public Nullable<System.Guid> TeacherId { get; set; }
+        public Nullable<System.Guid> RoomId { get; set; }
     
         public virtual AccountEntity AccountNavProp { get; set; }
         public virtual DayEntity DayNavProp { get; set; }
         public virtual SubjectEntity SubjectNavProp { get; set; }
+        public virtual RoomEntity RoomNavProp { get; set; }
+        public virtual TeacherEntity TeacherNavProp { get; set; }
     }
 }

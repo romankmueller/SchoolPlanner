@@ -78,15 +78,23 @@
     <Compile Include="DataAccess\LessonEntity.cs">
       <DependentUpon>BzsModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DataAccess\RoomEntity.cs">
+      <DependentUpon>BzsModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="DataAccess\SubjectEntity.cs">
+      <DependentUpon>BzsModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DataAccess\TeacherEntity.cs">
       <DependentUpon>BzsModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerService\AccountServerService.cs" />
     <Compile Include="ServerService\DayServerService.cs" />
     <Compile Include="ServerService\LessonServerService.cs" />
+    <Compile Include="ServerService\RoomServerService.cs" />
     <Compile Include="ServerService\ServerServiceBase.cs" />
     <Compile Include="ServerService\SubjectServerService.cs" />
+    <Compile Include="ServerService\TeacherServerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

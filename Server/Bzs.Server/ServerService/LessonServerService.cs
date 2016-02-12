@@ -24,17 +24,17 @@ namespace Bzs.Server.ServerService
         /// Returns the lesson.
         /// </summary>
         /// <param name="id">The lesson identifier.</param>
+        /// <param name="accountId">The account identifier.</param>
         /// <returns>The lesson data.</returns>
-        public LessonEditDto GetLesson(Guid id)
+        public LessonEditDto GetLesson(Guid id, Guid accountId)
         {
             LessonEditDto data = null;
             using (BzsEntityContainer ctx = this.CreateContainer())
             {
-                LessonEntity entity = ctx.LessonSet.FirstOrDefault(f => f.Id == id);
+                LessonEntity entity = ctx.LessonSet.FirstOrDefault(f => f.Id == id && f.AccountId == accountId);
                 if (entity != null)
                 {
                     data = this.FillLessonEditDto(new LessonEditDto(), entity);
-                    data.Remark = entity.Remark;
                 }
             }
 
@@ -96,62 +96,101 @@ namespace Bzs.Server.ServerService
             using (BzsEntityContainer ctx = this.CreateContainer())
             {
                 LessonEntity entity = ctx.LessonSet.FirstOrDefault(f => f.Id == itemToSave.Id);
-                if (entity == null)
+                if (entity != null)
                 {
-                    entity = new LessonEntity();
-                    entity.Id = itemToSave.Id;
-                    entity.AccountId = accountId;
-                    entity.DayId = itemToSave.DayId;
-                    entity.FromDate = DateTimeHelper.StringToDateTime(itemToSave.FromDate);
-                    entity.ToDate = DateTimeHelper.StringToDateTime(itemToSave.ToDate);
-                    entity.SubjectId = itemToSave.SubjectId;
-                    entity.Teacher = itemToSave.Teacher;
-                    entity.Room = itemToSave.Room;
-                    entity.Remark = itemToSave.Remark;
-                    entity.ModDate = DateTime.Now;
-                    entity.ModUser = Environment.UserName;
-
-                    ctx.LessonSet.Add(entity);
+                    result.Error = "ERR-LESSON-ALREADY-EXISTS";
+                    return result;
                 }
 
+                entity = new LessonEntity();
+                entity.Id = itemToSave.Id;
                 entity.AccountId = accountId;
                 entity.DayId = itemToSave.DayId;
                 entity.FromDate = DateTimeHelper.StringToDateTime(itemToSave.FromDate);
                 entity.ToDate = DateTimeHelper.StringToDateTime(itemToSave.ToDate);
                 entity.SubjectId = itemToSave.SubjectId;
-                entity.Teacher = itemToSave.Teacher;
-                entity.Room = itemToSave.Room;
+                entity.TeacherId = itemToSave.TeacherId;
+                entity.RoomId = itemToSave.RoomId;
+                entity.Remark = itemToSave.Remark;
+                entity.ModDate = DateTime.Now;
+                entity.ModUser = Environment.UserName;
+                ctx.LessonSet.Add(entity);
+
+                ctx.SaveChanges();
+                result.Success = true;
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Updates a lesson.
+        /// </summary>
+        /// <param name="itemToSave">The item to save.</param>
+        /// <param name="accountId">The account identifier.</param>
+        /// <returns>The result.</returns>
+        public ResultDto UpdateLesson(LessonEditDto itemToSave, Guid accountId)
+        {
+            ResultDto result = new ResultDto();
+            using (BzsEntityContainer ctx = this.CreateContainer())
+            {
+                LessonEntity entity = ctx.LessonSet.FirstOrDefault(f => f.Id == itemToSave.Id);
+                if (entity == null)
+                {
+                    result.Error = "ERR-LESSON-NOT-EXISTS";
+                    return result;
+                }
+
+                if (entity.AccountId != accountId)
+                {
+                    result.Error = "ERR-LESSON-ACCOUNT-INVALID";
+                    return result;
+                }
+
+                entity.DayId = itemToSave.DayId;
+                entity.FromDate = DateTimeHelper.StringToDateTime(itemToSave.FromDate);
+                entity.ToDate = DateTimeHelper.StringToDateTime(itemToSave.ToDate);
+                entity.SubjectId = itemToSave.SubjectId;
+                entity.TeacherId = itemToSave.TeacherId;
+                entity.RoomId = itemToSave.RoomId;
                 entity.Remark = itemToSave.Remark;
                 entity.ModDate = DateTime.Now;
                 entity.ModUser = Environment.UserName;
 
                 ctx.SaveChanges();
                 result.Success = true;
+                return result;
             }
-
-            return result;
         }
 
         /// <summary>
         /// Deletes a lesson.
         /// </summary>
         /// <param name="id">The lesson identifier.</param>
+        /// <param name="accountId">The account identifier.</param>
         /// <returns>The result.</returns>
-        public ResultDto DeleteLesson(Guid id)
+        public ResultDto DeleteLesson(Guid id, Guid accountId)
         {
             ResultDto result = new ResultDto();
             using (BzsEntityContainer ctx = this.CreateContainer())
             {
                 LessonEntity entity = ctx.LessonSet.FirstOrDefault(f => f.Id == id);
-                if (entity != null)
+                if (entity == null)
                 {
-                    ctx.LessonSet.Remove(entity);
-                    ctx.SaveChanges();
-                    result.Success = true;
+                    result.Error = "ERR-LESSON-NOT-EXISTS";
+                    return result;
                 }
-            }
 
-            return result;
+                if (entity.AccountId != accountId)
+                {
+                    result.Error = "ERR-LESSON-ACCOUNT-INVALID";
+                    return result;
+                }
+
+                ctx.LessonSet.Remove(entity);
+                ctx.SaveChanges();
+                result.Success = true;
+                return result;
+            }
         }
 
         /// <summary>
@@ -169,8 +208,8 @@ namespace Bzs.Server.ServerService
             item.ToDate = DateTimeHelper.DateTimeToString(entity.ToDate);
             item.SubjectId = entity.SubjectId;
             item.SubjectCode = entity.SubjectNavProp.Code;
-            item.Teacher = entity.Teacher;
-            item.Room = entity.Room;
+            item.TeacherId = entity.TeacherId;
+            item.RoomId = entity.RoomId;
             item.Remark = entity.Remark;
             return item;
         }

@@ -47,8 +47,12 @@
     <Compile Include="DataTransferObjects\Account\RegisterDto.cs" />
     <Compile Include="DataTransferObjects\Base\ResultDto.cs" />
     <Compile Include="DataTransferObjects\Lesson\LessonEditDto.cs" />
+    <Compile Include="DataTransferObjects\Room\RoomEditDto.cs" />
+    <Compile Include="DataTransferObjects\Room\RoomLookupDto.cs" />
     <Compile Include="DataTransferObjects\Subject\SubjectEditDto.cs" />
     <Compile Include="DataTransferObjects\Subject\SubjectLookupDto.cs" />
+    <Compile Include="DataTransferObjects\Teacher\TeacherEditDto.cs" />
+    <Compile Include="DataTransferObjects\Teacher\TeacherLookupDto.cs" />
     <Compile Include="Helpers\DateTimeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
