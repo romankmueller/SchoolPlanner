@@ -61,8 +61,8 @@ namespace Bzs.Server.ServerService
                 entity = new RoomEntity();
                 entity.Id = itemToSave.Id;
                 entity.AccountId = accountId;
-                entity.Code = itemToSave.Code;
-                entity.Caption = itemToSave.Caption;
+                entity.Code = itemToSave.Code.Length > 10 ? itemToSave.Code.Substring(0, 9) : itemToSave.Code;
+                entity.Caption = itemToSave.Caption.Length > 50 ? itemToSave.Caption.Substring(0, 49) : itemToSave.Caption;
                 entity.ModDate = DateTime.Now;
                 entity.ModUser = Environment.UserName;
                 ctx.RoomSet.Add(entity);
@@ -98,8 +98,8 @@ namespace Bzs.Server.ServerService
                     return result;
                 }
 
-                entity.Code = itemToSave.Code;
-                entity.Caption = itemToSave.Caption;
+                entity.Code = itemToSave.Code.Length > 10 ? itemToSave.Code.Substring(0, 9) : itemToSave.Code;
+                entity.Caption = itemToSave.Caption.Length > 50 ? itemToSave.Caption.Substring(0, 49) : itemToSave.Caption;
                 entity.ModDate = DateTime.Now;
                 entity.ModUser = Environment.UserName;
                 ctx.RoomSet.Add(entity);
@@ -152,6 +152,17 @@ namespace Bzs.Server.ServerService
                 result.Success = true;
                 return result;
             }
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the room exists.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="ctx">The entity container.</param>
+        /// <returns>The room exists.</returns>
+        public bool RoomExists(Guid id, BzsEntityContainer ctx)
+        {
+            return ctx.RoomSet.Any(f => f.Id == id);
         }
     }
 }

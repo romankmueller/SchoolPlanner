@@ -42,6 +42,16 @@ namespace Bzs.Server.ServerService
                     return new ResultDto("The account already exists.");
                 }
 
+                if (data.Account.Length > 50)
+                {
+                    return new ResultDto("ERR-REG-ACCOUNT-LENGTH");
+                }
+
+                if (data.Password.Length > 50)
+                {
+                    return new ResultDto("ERR-REG-PASSWORD-LENGTH");
+                }
+
                 AccountEntity entity = new AccountEntity();
                 entity.Id = Guid.NewGuid();
                 entity.Account = data.Account;

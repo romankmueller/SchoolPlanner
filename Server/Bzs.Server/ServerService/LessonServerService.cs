@@ -102,6 +102,30 @@ namespace Bzs.Server.ServerService
                     return result;
                 }
 
+                if (!new DayServerService().DayExists(itemToSave.DayId, ctx))
+                {
+                    result.Error = "ERR-LESSON-DAY-NOT-EXISTS";
+                    return result;
+                }
+
+                if (!new SubjectServerService().SubjectExists(itemToSave.SubjectId, ctx))
+                {
+                    result.Error = "ERR-LESSON-SUBJECT-NOT-EXISTS";
+                    return result;
+                }
+
+                if (itemToSave.TeacherId.HasValue && !new TeacherServerService().TeacherExists(itemToSave.TeacherId.Value, ctx))
+                {
+                    result.Error = "ERR-LESSON-TEACHER-NOT-EXISTS";
+                    return result;
+                }
+
+                if (itemToSave.RoomId.HasValue && !new RoomServerService().RoomExists(itemToSave.RoomId.Value, ctx))
+                {
+                    result.Error = "ERR-LESSON-ROOM-NOT-EXISTS";
+                    return result;
+                }
+
                 entity = new LessonEntity();
                 entity.Id = itemToSave.Id;
                 entity.AccountId = accountId;
