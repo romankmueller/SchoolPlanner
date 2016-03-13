@@ -64,7 +64,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server\DayServerServiceTest.cs" />
     <Compile Include="Server\LessonServerServiceTest.cs" />
+    <Compile Include="Server\RoomServerServiceTest.cs" />
     <Compile Include="Server\SubjectServerServiceTest.cs" />
+    <Compile Include="Server\TeacherServerServiceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bzs.Portable\Bzs.Portable.csproj">

@@ -29,5 +29,7 @@ namespace Bzs.Server.DataAccess
         public virtual DbSet<DayEntity> DaySet { get; set; }
         public virtual DbSet<LessonEntity> LessonSet { get; set; }
         public virtual DbSet<SubjectEntity> SubjectSet { get; set; }
+        public virtual DbSet<RoomEntity> RoomSet { get; set; }
+        public virtual DbSet<TeacherEntity> TeacherSet { get; set; }
     }
 }

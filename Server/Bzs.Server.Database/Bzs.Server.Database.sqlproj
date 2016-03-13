@@ -67,6 +67,8 @@
     <Build Include="dbo\Tables\subject.sql" />
     <Build Include="dbo\Tables\day.sql" />
     <Build Include="dbo\Tables\lesson.sql" />
+    <Build Include="dbo\Tables\teacher.sql" />
+    <Build Include="dbo\Tables\room.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Bzs.Server.Database.Azure.publish.xml" />

@@ -58,7 +58,7 @@ namespace Bzs.Server
         [TestMethod]
         public void GetLesson_InvalidId_ReturnsNull()
         {
-            LessonEditDto item = this.service.GetLesson(Guid.NewGuid());
+            LessonEditDto item = this.service.GetLesson(Guid.NewGuid(), new Guid("FDB44E7C-AB09-4DF2-9CA9-C42D001E2957"));
 
             Assert.IsNull(item);
         }
@@ -84,7 +84,7 @@ namespace Bzs.Server
             List<LessonEditDto> items = this.service.GetLessonsOfWeek(new Guid("FDB44E7C-AB09-4DF2-9CA9-C42D001E2957"));
 
             Assert.IsNotNull(items);
-            Assert.AreEqual(2, items.Count);
+            Assert.AreEqual(1, items.Count);
         }
     }
 }

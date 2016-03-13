@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Bzs.Portable.DataTransferObjects.Day;
 using Bzs.Server.DataAccess;
@@ -33,6 +34,17 @@ namespace Bzs.Server.ServerService
                     Caption = f.Caption
                 }).ToList();    
             }
+        }
+
+        /// <summary>
+        /// Returns a value indicating whether the day exists.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="ctx">The entity container.</param>
+        /// <returns>The day exists.</returns>
+        public bool DayExists(Guid id, BzsEntityContainer ctx)
+        {
+            return ctx.DaySet.Any(f => f.Id == id);
         }
     }
 }

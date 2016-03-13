@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Bzs.Portable.DataTransferObjects.Subject;
 using Bzs.Server.ServerService;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -57,7 +58,7 @@ namespace Bzs.Server
         [TestMethod]
         public void GetSubjectLookup_ReturnsValues()
         {
-            List<SubjectLookupDto> result = this.service.GetSubjectLookup();
+            List<SubjectLookupDto> result = this.service.GetSubjectLookup(new Guid("FDB44E7C-AB09-4DF2-9CA9-C42D001E2957"));
 
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Count > 0);
