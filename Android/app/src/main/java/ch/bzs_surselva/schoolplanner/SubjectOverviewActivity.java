@@ -276,6 +276,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
         {
             try
             {
+                // Blabla
                 HttpsURLConnection connection = RequestHelper.createRequest("DeleteSubject", "DELETE");
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
