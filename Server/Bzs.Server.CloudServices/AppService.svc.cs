@@ -143,9 +143,9 @@ namespace Bzs.Server.CloudServices
         /// <summary>
         /// Deletes a subject.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="idToDelete">The identifier.</param>
         /// <returns>The result.</returns>
-        public ResultDto DeleteSubject(string id)
+        public ResultDto DeleteSubject(IdDto idToDelete)
         {
             this.SetResponseHeaderCacheExpiration();
 
@@ -154,7 +154,7 @@ namespace Bzs.Server.CloudServices
             Guid accountId = accountService.GetAccountId(credentials.Account);
 
             SubjectServerService service = new SubjectServerService();
-            return service.DeleteSubject(new Guid(id), accountId);
+            return service.DeleteSubject(idToDelete.Id, accountId);
         }
 
         /// <summary>
@@ -210,9 +210,9 @@ namespace Bzs.Server.CloudServices
         /// <summary>
         /// Deletes a teacher.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="idToDelete">The identifier.</param>
         /// <returns>The result.</returns>
-        public ResultDto DeleteTeacher(string id)
+        public ResultDto DeleteTeacher(IdDto idToDelete)
         {
             this.SetResponseHeaderCacheExpiration();
 
@@ -221,7 +221,7 @@ namespace Bzs.Server.CloudServices
             Guid accountId = accountService.GetAccountId(credentials.Account);
 
             TeacherServerService service = new TeacherServerService();
-            return service.DeleteTeacher(new Guid(id), accountId);
+            return service.DeleteTeacher(idToDelete.Id, accountId);
         }
 
         /// <summary>
@@ -277,9 +277,9 @@ namespace Bzs.Server.CloudServices
         /// <summary>
         /// Deletes a room.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="idToDelete">The identifier.</param>
         /// <returns>The result.</returns>
-        public ResultDto DeleteRoom(string id)
+        public ResultDto DeleteRoom(IdDto idToDelete)
         {
             this.SetResponseHeaderCacheExpiration();
 
@@ -288,7 +288,7 @@ namespace Bzs.Server.CloudServices
             Guid accountId = accountService.GetAccountId(credentials.Account);
 
             RoomServerService service = new RoomServerService();
-            return service.DeleteRoom(new Guid(id), accountId);
+            return service.DeleteRoom(idToDelete.Id, accountId);
         }
 
         /// <summary>
@@ -378,9 +378,9 @@ namespace Bzs.Server.CloudServices
         /// <summary>
         /// Deletes a lesson.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="idToDelete">The identifier.</param>
         /// <returns>The result.</returns>
-        public ResultDto DeleteLesson(string id)
+        public ResultDto DeleteLesson(IdDto idToDelete)
         {
             this.SetResponseHeaderCacheExpiration();
 
@@ -389,7 +389,7 @@ namespace Bzs.Server.CloudServices
             Guid accountId = accountService.GetAccountId(credentials.Account);
 
             LessonServerService service = new LessonServerService();
-            return service.DeleteLesson(new Guid(id), accountId);
+            return service.DeleteLesson(idToDelete.Id, accountId);
         }
 
         /// <summary>

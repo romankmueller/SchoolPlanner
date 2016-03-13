@@ -41,6 +41,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="DataTransferObjects\Account\RetrievePasswordDto.cs" />
+    <Compile Include="DataTransferObjects\Base\IdDto.cs" />
     <Compile Include="DataTransferObjects\Base\ItemDtoBase.cs" />
     <Compile Include="DataTransferObjects\Day\DayLookupDto.cs" />
     <Compile Include="DataTransferObjects\Authentication\LoginResultDto.cs" />
