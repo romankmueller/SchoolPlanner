@@ -35,6 +35,7 @@ import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
 public class SubjectOverviewActivity extends AppCompatActivity
 {
+    // Test
     private LoadTask loadTask;
     private DeleteTask deleteTask;
     private SubjectOverviewAdapter adapter;
@@ -276,7 +277,6 @@ public class SubjectOverviewActivity extends AppCompatActivity
         {
             try
             {
-                // Blabla
                 HttpsURLConnection connection = RequestHelper.createRequest("DeleteSubject", "DELETE");
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
