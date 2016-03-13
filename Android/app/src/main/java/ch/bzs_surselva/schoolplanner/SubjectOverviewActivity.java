@@ -35,7 +35,6 @@ import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
 public class SubjectOverviewActivity extends AppCompatActivity
 {
-    // Test
     private LoadTask loadTask;
     private DeleteTask deleteTask;
     private SubjectOverviewAdapter adapter;
