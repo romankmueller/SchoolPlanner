@@ -21,4 +21,15 @@ public class MasterDataActivity extends AppCompatActivity
         Intent intent = new Intent(this, SubjectOverviewActivity.class);
         this.startActivity(intent);
     }
+
+    public void buttonTeachersOnClick(View view)
+    {
+        Intent intent = new Intent (this, TeacherOverviewActivity.class);
+        this.startActivity(intent);
+    }
+    public void buttonRoomsOnClick(View view)
+    {
+        Intent intent = new Intent(this,RoomOverviewActivity.class);
+        this.startActivity(intent);
+    }
 }

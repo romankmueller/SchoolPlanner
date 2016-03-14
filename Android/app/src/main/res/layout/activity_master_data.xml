@@ -17,4 +17,18 @@
         android:text="@string/cc_subjects"
         android:id="@+id/buttonSubjects"
         android:onClick="buttonSubjectsOnClick"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cc_teacher"
+        android:id="@+id/buttonTeachers"
+        android:onClick="buttonTeachersOnClick" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/cc_rooms"
+        android:id="@+id/buttonRooms"
+        android:onClick="buttonRoomsOnClick" />
 </LinearLayout>

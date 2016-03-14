@@ -52,4 +52,16 @@
     <string name="cc_yes">Yes</string>
     <string name="cc_would_you_like_to_delete_the_subject">Would you like to delete the subject?</string>
     <string name="cc_master_data">Master Data</string>
+    <string name="teacher_caption">Caption</string>
+    <string name="teacher_abbreviation">Abbreviation</string>
+    <string name="cc_teacher">Teachers</string>
+    <string name="newText">newText</string>
+    <string name="title_activity_teacher">teacher</string>
+    <string name="cc_room">Abbreviation</string>
+    <string name="abbreviation">Abbreviation or No.</string>
+    <string name="room_no">Room name or No.</string>
+    <string name="cc_rooms">Rooms</string>
+    <string name="cc_would_you_like_to_delete_the_room">Would you like to delete the room?</string>
+    <string name="title_activity_room_edit">Edit Room</string>
+    <string name="cc_would_you_like_to_delete_the_teacher">Would you like to delete this teacher?</string>
 </resources>
