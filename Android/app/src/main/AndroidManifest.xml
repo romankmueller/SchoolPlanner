@@ -65,7 +65,7 @@
         </activity>
         <activity
             android:name=".SubjectOverviewActivity"
-            android:label=""
+            android:label="Subject Overview"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -101,7 +101,7 @@
          </activity>
 
         <activity android:name=".RoomOverviewActivity"
-            android:label=""
+            android:label="Room Overview"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
