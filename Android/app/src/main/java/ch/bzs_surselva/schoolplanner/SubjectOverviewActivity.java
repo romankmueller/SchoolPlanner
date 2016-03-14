@@ -24,6 +24,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -242,18 +244,27 @@ public class SubjectOverviewActivity extends AppCompatActivity
                 }
             }
 
+            Collections.sort(loadedData, new Comparator<SubjectLookupDto>()
+            {
+                @Override
+                public int compare(SubjectLookupDto p1, SubjectLookupDto p2)
+                {
+
+
+                    return p1.getCaption().compareTo(p2.getCaption());
+                }
+            });
             didLoadModel(loadedData);
-        }
+                }
 
-        @Override
-        protected void onCancelled()
-        {
-            loadTask = null;
-            this.dialog.dismiss();
-        }
-    }
+                @Override
+                protected void onCancelled() {
+                    loadTask = null;
+                    this.dialog.dismiss();
+                }
+            }
 
-    public class DeleteTask extends AsyncTask<Void, Void, Boolean>
+            public class DeleteTask extends AsyncTask<Void, Void, Boolean>
     {
         private UUID idToDelete;
         private ProgressDialog dialog;
