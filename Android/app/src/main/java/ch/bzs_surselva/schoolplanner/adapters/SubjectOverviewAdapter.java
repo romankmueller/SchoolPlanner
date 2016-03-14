@@ -30,9 +30,9 @@ public class SubjectOverviewAdapter extends ArrayAdapter<SubjectLookupDto>
         }
 
         TextView textViewLarge = (TextView) convertView.findViewById(R.id.textViewLarge);
-        textViewLarge.setText(dataItem.getCode());
+        textViewLarge.setText(dataItem.getCaption());
         TextView textViewSmall = (TextView)convertView.findViewById(R.id.textViewSmall);
-        textViewSmall.setText(dataItem.getCaption());
+        textViewSmall.setText(dataItem.getCode());
 
         return convertView;
     }

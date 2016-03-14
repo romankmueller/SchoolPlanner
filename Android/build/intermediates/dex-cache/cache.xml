@@ -2,39 +2,39 @@
 <items version="2" >
 
     <item
-        jar="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
-        <dex dex="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/pre-dexed/debug/classes-8a8288c1e13ef2151e4c8fc4815f09fc5cfaac70.jar" />
-    </item>
-    <item
-        jar="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/exploded-aar/com.android.support/design/22.2.1/jars/classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="1821601ddbec5ff125653097812823388700af74">
-        <dex dex="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/pre-dexed/debug/classes-67c6f04489252c4e302f29a31055388dd6cebbf5.jar" />
-    </item>
-    <item
-        jar="/Users/muellero/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
-        <dex dex="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-f3a38c4bfa60af62887f8aaa51b15bbcdc2504fd.jar" />
-    </item>
-    <item
-        jar="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/libs/internal_impl-22.2.1.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
-        <dex dex="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-1145ed849d5a57984ff164e90c5ffe7184538247.jar" />
-    </item>
-    <item
-        jar="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
+        jar="C:\src\SchoolPlanner\Android\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\classes.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="f8efd0096475e0daf054267b61544e10dc776503">
-        <dex dex="/Users/muellero/AndroidStudioProjects/SchoolPlanner/Android/app/build/intermediates/pre-dexed/debug/classes-3e8d7d5ef70f71765322062298b2e7a4d8025a4b.jar" />
+        <dex dex="C:\src\SchoolPlanner\Android\app\build\intermediates\pre-dexed\debug\classes-ea966efdc4fca597a45f99448b500d8626203c38.jar" />
+    </item>
+    <item
+        jar="C:\src\SchoolPlanner\Android\app\build\intermediates\exploded-aar\com.android.support\design\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="1821601ddbec5ff125653097812823388700af74">
+        <dex dex="C:\src\SchoolPlanner\Android\app\build\intermediates\pre-dexed\debug\classes-7169eeb2e3163ad8805778c12d266e080102a3dc.jar" />
+    </item>
+    <item
+        jar="C:\src\SchoolPlanner\Android\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\22.2.1\jars\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="C:\src\SchoolPlanner\Android\app\build\intermediates\pre-dexed\debug\classes-6623c7a3b92a3f281ae011939dfadfaaffabe66d.jar" />
+    </item>
+    <item
+        jar="C:\Users\eberl_000\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\22.2.1\support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="C:\src\SchoolPlanner\Android\app\build\intermediates\pre-dexed\debug\support-annotations-22.2.1-76de1d89d548a00735d3b0145255be0bba85dd67.jar" />
+    </item>
+    <item
+        jar="C:\src\SchoolPlanner\Android\app\build\intermediates\exploded-aar\com.android.support\support-v4\22.2.1\jars\libs\internal_impl-22.2.1.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="c471eaaba13ff64f6e0383d1c30a9cdc9a97efeb">
+        <dex dex="C:\src\SchoolPlanner\Android\app\build\intermediates\pre-dexed\debug\internal_impl-22.2.1-c2dfbd635f285283b363f0bdfef17e5f50229ecc.jar" />
     </item>
 
 </items>
