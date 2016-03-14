@@ -88,11 +88,11 @@ namespace Bzs.Server.CloudServices
         /// <summary>
         /// Deletes a subject.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="idToDelete">The identifier.</param>
         /// <returns>The result.</returns>
         [WebInvoke(UriTemplate = "DeleteSubject", Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        ResultDto DeleteSubject(string id);
+        ResultDto DeleteSubject(IdDto idToDelete);
 
         /// <summary>
         /// Returns the teacher lookup.
@@ -123,11 +123,11 @@ namespace Bzs.Server.CloudServices
         /// <summary>
         /// Deletes a teacher.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="idToDelete">The identifier.</param>
         /// <returns>The result.</returns>
         [WebInvoke(UriTemplate = "DeleteTeacher", Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        ResultDto DeleteTeacher(string id);
+        ResultDto DeleteTeacher(IdDto idToDelete);
 
         /// <summary>
         /// Returns the room lookup.
@@ -158,11 +158,11 @@ namespace Bzs.Server.CloudServices
         /// <summary>
         /// Deletes a room.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="idToDelete">The identifier.</param>
         /// <returns>The result.</returns>
         [WebInvoke(UriTemplate = "DeleteRoom", Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        ResultDto DeleteRoom(string id);
+        ResultDto DeleteRoom(IdDto idToDelete);
 
         /// <summary>
         /// Returns the lesson.
@@ -211,10 +211,10 @@ namespace Bzs.Server.CloudServices
         /// <summary>
         /// Deletes a lesson.
         /// </summary>
-        /// <param name="id">The identifier.</param>
+        /// <param name="idToDelete">The identifier.</param>
         /// <returns>The result.</returns>
-        [WebInvoke(UriTemplate = "DeleteLesson/{id}", Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
+        [WebInvoke(UriTemplate = "DeleteLesson", Method = "DELETE", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        ResultDto DeleteLesson(string id);
+        ResultDto DeleteLesson(IdDto idToDelete);
     }
 }

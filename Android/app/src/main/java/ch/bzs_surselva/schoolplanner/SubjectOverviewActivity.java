@@ -18,8 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -27,6 +29,7 @@ import java.util.UUID;
 import javax.net.ssl.HttpsURLConnection;
 
 import ch.bzs_surselva.schoolplanner.adapters.SubjectOverviewAdapter;
+import ch.bzs_surselva.schoolplanner.dto.IdDto;
 import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
@@ -274,9 +277,16 @@ public class SubjectOverviewActivity extends AppCompatActivity
         {
             try
             {
-                HttpsURLConnection connection = RequestHelper.createRequest("DeleteSubject/" + this.idToDelete.toString(), "DELETE");
+                HttpsURLConnection connection = RequestHelper.createRequest("DeleteSubject", "DELETE");
+                connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
-                connection.connect();
+                connection.setDoOutput(true);
+                OutputStream stream = connection.getOutputStream();
+                DataOutputStream wr = new DataOutputStream(stream);
+                String json = new IdDto(this.idToDelete).toJson().toString();
+                wr.writeBytes(json);
+                wr.flush();
+                wr.close();
                 int status = connection.getResponseCode();
                 if (status == 200 || status == 201)
                 {
@@ -322,7 +332,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
                     JSONObject json = new JSONObject(this.content);
                     if (json.getBoolean("Success") == false)
                     {
-                        //json.getString("Error");
+                        refreshData();
                     }
                 }
                 catch (JSONException e)
