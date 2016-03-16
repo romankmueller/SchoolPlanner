@@ -1,7 +1,11 @@
 package ch.bzs_surselva.schoolplanner.dto;
 
+
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
+
 
 /**
  * Created by conrad on 21.02.2016.
@@ -48,4 +52,6 @@ public final class TeacherLookupDto extends ItemDtoBase
     {
         return this.caption;
     }
+
+
 }

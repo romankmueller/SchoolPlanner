@@ -18,16 +18,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import ch.bzs_surselva.schoolplanner.adapters.SubjectOverviewAdapter;
 import ch.bzs_surselva.schoolplanner.adapters.TeacherOverviewAdapter;
+import ch.bzs_surselva.schoolplanner.dto.IdDto;
 import ch.bzs_surselva.schoolplanner.dto.ResultDto;
 import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
 import ch.bzs_surselva.schoolplanner.dto.TeacherLookupDto;
@@ -247,6 +252,15 @@ public class TeacherOverviewActivity extends AppCompatActivity
                 {
                 }
             }
+            Collections.sort(loadedData, new Comparator<TeacherLookupDto>()
+            {
+                @Override
+                public int compare(TeacherLookupDto p1, TeacherLookupDto p2)
+                {
+                    return p1.getCaption().compareToIgnoreCase(p2.getCaption());
+                }
+            });
+
 
             didLoadModel(loadedData);
         }
@@ -284,8 +298,16 @@ public class TeacherOverviewActivity extends AppCompatActivity
             try
             {
                 HttpsURLConnection connection = RequestHelper.createRequest("DeleteTeacher","DELETE");
+                connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
-                connection.connect();
+                connection.setDoOutput(true);
+                OutputStream stream = connection.getOutputStream();
+                DataOutputStream wr = new DataOutputStream(stream);
+                String json = new IdDto( this.idToDelete).toJson().toString();
+                wr.writeBytes(json);
+                wr.flush();
+                wr.close();
+
                 int status = connection.getResponseCode();
                 if (status == 200 || status == 201)
                 {
@@ -328,11 +350,9 @@ public class TeacherOverviewActivity extends AppCompatActivity
             {
                 try {
                     JSONObject json = new JSONObject(this.content);
-
-
                     if (json.getBoolean("Success") == false)
                     {
-                        this.idToDelete.toString();
+                        refreshData();
 
                         //json.getString("Error");
                     }

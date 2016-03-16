@@ -10,9 +10,4 @@
         android:orderInCategory="100"
         app:showAsAction="always" />
 
-    <item android:id="@+id/action_delete"
-        android:title="@string/action_delete"
-        android:icon="@drawable/ic_action_remove"
-        android:orderInCategory="100"
-        app:showAsAction="always" />
 </menu>

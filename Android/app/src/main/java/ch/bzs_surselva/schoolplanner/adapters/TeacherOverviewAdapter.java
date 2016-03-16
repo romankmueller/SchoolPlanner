@@ -9,8 +9,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+
 import ch.bzs_surselva.schoolplanner.R;
-import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
+import ch.bzs_surselva.schoolplanner.dto.TeacherDto;
 import ch.bzs_surselva.schoolplanner.dto.TeacherLookupDto;
 
 /**
@@ -21,6 +22,7 @@ public class TeacherOverviewAdapter extends ArrayAdapter<TeacherLookupDto>
     public TeacherOverviewAdapter(Context context, ArrayList<TeacherLookupDto> data)
     {
         super(context, 0, data);
+
     }
 
     @Override
@@ -31,12 +33,12 @@ public class TeacherOverviewAdapter extends ArrayAdapter<TeacherLookupDto>
         if (convertView == null)
         {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.teacher_overview_item, parent, false);
-        }
+             }
 
         TextView textViewLarge = (TextView) convertView.findViewById(R.id.textViewLarge);
-        textViewLarge.setText(dataItem.getCode());
+        textViewLarge.setText(dataItem.getCaption());
         TextView textViewSmall = (TextView)convertView.findViewById(R.id.textViewSmall);
-        textViewSmall.setText(dataItem.getCaption());
+        textViewSmall.setText(dataItem.getCode());
 
         return convertView;
     }

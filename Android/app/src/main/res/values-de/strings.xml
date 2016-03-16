@@ -43,7 +43,7 @@
     <string name="to">Bis</string>
     <string name="subject">Fach</string>
     <string name="teacher">Lehrer</string>
-    <string name="room">Raum</string>
+    <string name="rooms">Zimmer</string>
     <string name="remark">Bemerkung</string>
     <string name="title_activity_subject_edit">Fach bearbeiten</string>
     <string name="cc_subject">Fach</string>
@@ -58,10 +58,11 @@
     <string name="teacher_abbreviation">Abkürzung</string>
     <string name="cc_teacher">Lehrer</string>
     <string name="newText">Neuer Text</string>
-    <string name="title_activity_teacher">Lehrer</string>
-    <string name="cc_rooms">Schulzimmer</string>
-    <string name="room_no">Schulzimmer Name oder Nr.</string>
+    <string name="title_activity_teacher"> Bearbeite Lehrer</string>
+    <string name="cc_room">ZimmerNr. oder Abbkürzung</string>
+    <string name="room_no">Schulzimmer Name und Nr.</string>
     <string name="cc_would_you_like_to_delete_the_room">Möchten sie das Schulzimmer löschen?</string>
     <string name="abbreviation">Abkürzung oder Nr.</string>
     <string name="cc_would_you_like_to_delete_the_teacher">Möchten sie diesen Lehrer löschen?</string>
+    <string name="title_activity_teacher_overview">Lehrer Uebersicht</string>
 </resources>

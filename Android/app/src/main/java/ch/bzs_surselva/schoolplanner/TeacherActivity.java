@@ -82,14 +82,6 @@ public class TeacherActivity extends AppCompatActivity
                 this.saveChanges();
                 return true;
             }
-           /* else
-            {
-                if (id == R.id.action_delete)
-                {
-                    this.saveChanges();
-                    return true;
-                }
-            }*/
 
             return super.onOptionsItemSelected(item);
         }

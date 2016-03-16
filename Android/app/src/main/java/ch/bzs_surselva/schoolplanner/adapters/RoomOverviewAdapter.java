@@ -34,9 +34,9 @@ public class RoomOverviewAdapter extends ArrayAdapter<RoomLookupDto>
         }
 
         TextView textViewLarge = (TextView) convertView.findViewById(R.id.TextViewLarge);
-        textViewLarge.setText(dataItem.getCode());
+        textViewLarge.setText(dataItem.getCaption());
         TextView textViewSmall = (TextView) convertView.findViewById(R.id.TextViewSmall);
-        textViewSmall.setText(dataItem.getCaption());
+        textViewSmall.setText(dataItem.getCode());
 
 
          return convertView;

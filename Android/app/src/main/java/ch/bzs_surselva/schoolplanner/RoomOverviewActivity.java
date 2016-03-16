@@ -18,16 +18,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import ch.bzs_surselva.schoolplanner.adapters.RoomOverviewAdapter;
+import ch.bzs_surselva.schoolplanner.dto.IdDto;
 import ch.bzs_surselva.schoolplanner.dto.RoomLookupDto;
+import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
 public class RoomOverviewActivity extends AppCompatActivity
@@ -66,17 +72,7 @@ public class RoomOverviewActivity extends AppCompatActivity
             }
         });
 
-       /* this.alertBuilder = new AlertDialog.Builder(this);
-        this.alertBuilder.setMessage(this.getString(R.string.cc_would_you_like_to_delete_the_room));
-        this.alertBuilder.setPositiveButton(this.getString(R.string.cc_yes), new DialogInterface.OnClickListener() {
-          @Override
-            public void OnClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                deleteRoom(deleteId);
-                deleteId = null;
-            }
-        });
-        */
+
         this.alertBuilder.setNegativeButton(this.getString(R.string.cc_no), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -217,6 +213,12 @@ public class RoomOverviewActivity extends AppCompatActivity
                 } catch (JSONException e) {
                 }
             }
+            Collections.sort(loadedData, new Comparator<RoomLookupDto>() {
+                @Override
+                public int compare(RoomLookupDto p1, RoomLookupDto p2) {
+                    return p1.getCaption().compareToIgnoreCase(p2.getCaption());
+                }
+            });
 
             didLoadModel(loadedData);
         }
@@ -247,9 +249,17 @@ public class RoomOverviewActivity extends AppCompatActivity
         @Override
         protected Boolean doInBackground(Void... params) {
             try {
-                HttpsURLConnection connection = RequestHelper.createRequest("DeleteRoom/" + this.idToDelete.toString(), "DELETE");
+                HttpsURLConnection connection = RequestHelper.createRequest("DeleteRoom", "DELETE");
+                connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
-                connection.connect();
+                connection.setDoOutput(true);
+                OutputStream stream = connection.getOutputStream();
+                DataOutputStream wr = new DataOutputStream(stream);
+                String json = new IdDto(this.idToDelete).toJson().toString();
+                wr.writeBytes(json);
+                wr.flush();
+                wr.close();
+
                 int status = connection.getResponseCode();
                 if (status == 200 || status == 201) {
                     BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -282,10 +292,14 @@ public class RoomOverviewActivity extends AppCompatActivity
             if (success) {
                 try {
                     JSONObject json = new JSONObject(this.content);
-                    if (json.getBoolean("Success") == false) {
+                    if (json.getBoolean("Success") == false)
+                    {
+                        refreshData();
                         //json.getString("Error");
                     }
-                } catch (JSONException e) {
+                }
+                catch (JSONException e)
+                {
                 }
             }
 

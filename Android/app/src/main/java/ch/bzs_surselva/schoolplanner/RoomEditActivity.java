@@ -39,6 +39,7 @@ public class RoomEditActivity extends AppCompatActivity
     private SaveTask saveTask;
     private RoomEditDto model;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -46,7 +47,7 @@ public class RoomEditActivity extends AppCompatActivity
         this.setContentView(R.layout.activity_room_edit);
 
         this.editTextCode = (EditText)this.findViewById(R.id.editTextCode);
-        this.editTextCaption = (EditText) this.findViewById(R.id.editTextCaption);
+        this.editTextCaption = (EditText)this.findViewById(R.id.editTextCaption);
 
         Intent intent = this.getIntent();
         if (intent.hasExtra("Id"))

@@ -85,7 +85,7 @@
 
         <activity
             android:name=".TeacherOverviewActivity"
-            android:label="@string/title_activity_teacher"
+            android:label="@string/title_activity_teacher_overview"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -7,15 +7,15 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/newText"
-        android:id="@+id/textViewSmall"
-        style="@style/TextAppearance.AppCompat.Small" />
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
 
         android:text="@string/newText"
         android:id="@+id/textViewLarge"
         style="@style/TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/newText"
+        android:id="@+id/textViewSmall"
+        style="@style/TextAppearance.AppCompat.Small" />
 </LinearLayout>

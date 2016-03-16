@@ -243,6 +243,14 @@ public class SubjectOverviewActivity extends AppCompatActivity
                 {
                 }
             }
+            Collections.sort(loadedData, new Comparator<SubjectLookupDto>()
+            {
+                @Override
+                public int compare(SubjectLookupDto p1, SubjectLookupDto p2)
+                {
+                    return p1.getCaption().compareTo(p2.getCaption());
+                }
+            });
 
             Collections.sort(loadedData, new Comparator<SubjectLookupDto>()
             {
