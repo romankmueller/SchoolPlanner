@@ -71,8 +71,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.bzs_surselva.schoolplanner.MasterDataActivity" />
         </activity>
-        <activity android:name=".MasterDataActivity" >
-        </activity>
+
 
         <activity
             android:name=".TeacherActivity"
@@ -107,6 +106,16 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.bzs_surselva.schoolplanner.MasterDataActivity">
             </meta-data>
+        </activity>
+
+        <activity android:name=".MasterDataActivity"
+            android:label="MasterData"
+            android:parentActivityName=".TimetableActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.bzs_surselva.schoolplanner.TimetableActivity">
+            </meta-data>
+
         </activity>
 
 
