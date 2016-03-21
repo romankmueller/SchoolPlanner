@@ -58,7 +58,7 @@
         <activity
             android:name=".SubjectEditActivity"
             android:label="@string/title_activity_subject_edit"
-            android:parentActivityName=".SubjectOverviewActivity" >
+            android:parentActivityName=".SubjectEditActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.bzs_surselva.schoolplanner.SubjectOverviewActivity" />
@@ -66,10 +66,10 @@
         <activity
             android:name=".SubjectOverviewActivity"
             android:label="Subject Overview"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MasterDataActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.bzs_surselva.schoolplanner.MainActivity" />
+                android:value="ch.bzs_surselva.schoolplanner.MasterDataActivity" />
         </activity>
         <activity android:name=".MasterDataActivity" >
         </activity>
@@ -86,10 +86,10 @@
         <activity
             android:name=".TeacherOverviewActivity"
             android:label="@string/title_activity_teacher_overview"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".MasterDataActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.bzs_surselva.schoolplanner.MainActivity" />
+                android:value="ch.bzs_surselva.schoolplanner.MasterDataActivity" />
         </activity>
 
         <activity android:name=".RoomEditActivity"
@@ -102,10 +102,10 @@
 
         <activity android:name=".RoomOverviewActivity"
             android:label="Room Overview"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MasterDataActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.bzs_surselva.schoolplanner.MainActivity">
+                android:value="ch.bzs_surselva.schoolplanner.MasterDataActivity">
             </meta-data>
         </activity>
 
