@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<resources>
+<resources> titel vum activity hend no kei übersetzig zum Teil.
     <string name="action_about">Über</string>
     <string name="account">Benutzerkonto</string>
     <string name="action_new">Neu</string>
@@ -68,3 +68,8 @@
     <string name="unknown_error_occurred">Unbekannter Fehler</string>
     <string name="version">Version</string>
 </resources>
+
+
+
+
+

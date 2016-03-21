@@ -50,7 +50,7 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/author_names"
+        android:text="@string/authors"
         android:id="@+id/textViewAuthor"
         style="@style/TextAppearance.AppCompat.Medium" />
 
