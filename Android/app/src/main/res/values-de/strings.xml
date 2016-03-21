@@ -4,12 +4,14 @@
     <string name="app_name">BZS Surselva</string>
     <string name="action_settings">Einstellungen</string>
     <string name="action_about">Über</string>
+    <string name="author_names">E. Eberle, O. Reichert, F. Senti</string>
+    <string name="authors">Autoren</string>
     <string name="title_activity_about">Über</string>
     <string name="title">Titel</string>
     <string name="version">Version</string>
     <string name="not_available">not available</string>
-    <string name="authors">Autoren</string>
-    <string name="author_names">E. Eberle, O. Reichert, F. Senti</string>
+
+
     <string name="support">Support</string>
     <string name="review">Review</string>
     <string name="timetable">Stundenplan</string>
