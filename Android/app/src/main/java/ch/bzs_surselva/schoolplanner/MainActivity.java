@@ -11,9 +11,12 @@ import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,14 +25,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import ch.bzs_surselva.schoolplanner.adapters.SubjectOverviewAdapter;
 import ch.bzs_surselva.schoolplanner.dto.ResultDto;
+import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.CredentialHelper;
+import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
     private LinearLayout linearLayoutLogin;
     private EditText editTextAccount;
     private EditText editTextPassword;
@@ -37,8 +44,7 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout linearLayoutMain;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
 
@@ -52,27 +58,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         this.getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onPrepareOptionsMenu (Menu menu)
-    {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         //menu.getItem(0).setVisible(CredentialHelper.getAccount() != null);
         //menu.getItem(1).setVisible(CredentialHelper.getAccount() != null);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_masterdata)
-        {
+        if (id == R.id.action_masterdata) {
             Intent intent = new Intent(this, MasterDataActivity.class);
             this.startActivity(intent);
             return true;
@@ -80,8 +82,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         // Wenn auf den Abmelden-Eintrag geklickt wurde, dann löschen wir die Anmeldeinfos.
-        if (id == R.id.action_logoff)
-        {
+        if (id == R.id.action_logoff) {
             this.editTextAccount.setText(null);
             this.editTextPassword.setText(null);
             CredentialHelper.setAccount(null);
@@ -101,53 +102,43 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
 
         this.displayLoginOrMainView();
     }
 
-    public void buttonLoginOnClick(View v)
-    {
+    public void buttonLoginOnClick(View v) {
         this.loginTask = new LoginTask(this.editTextAccount.getText().toString(), this.editTextPassword.getText().toString());
         this.loginTask.execute((Void) null);
     }
 
-    public void buttonRegisterOnClick(View v)
-    {
+    public void buttonRegisterOnClick(View v) {
         Intent intent = new Intent(this, RegisterActivity.class);
         this.startActivity(intent);
     }
 
-    public void buttonCredentialsForgotten(View v)
-    {
+    public void buttonCredentialsForgotten(View v) {
         Intent intent = new Intent(this, PasswordActivity.class);
         this.startActivity(intent);
     }
 
-    public void buttonTimetableOnClick(View v)
-    {
+    public void buttonTimetableOnClick(View v) {
         Intent intent = new Intent(this, TimetableActivity.class);
         this.startActivity(intent);
     }
 
-    private void displayLoginOrMainView()
-    {
-        if (CredentialHelper.getAccount() == null)
-        {
+    private void displayLoginOrMainView() {
+        if (CredentialHelper.getAccount() == null) {
             this.linearLayoutLogin.setVisibility(View.VISIBLE);
             this.linearLayoutMain.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             this.linearLayoutLogin.setVisibility(View.GONE);
             this.linearLayoutMain.setVisibility(View.VISIBLE);
         }
     }
 
-    private void displayAlert(String alertMessage)
-    {
+    private void displayAlert(String alertMessage) {
         StringBuilder sb = new StringBuilder();
         sb.append(alertMessage);
         new AlertDialog.Builder(MainActivity.this)
@@ -163,32 +154,27 @@ public class MainActivity extends AppCompatActivity
                 .show();
     }
 
-    public class LoginTask extends AsyncTask<Void, Void, Boolean>
-    {
+    public class LoginTask extends AsyncTask<Void, Void, Boolean> {
         private final String account;
         private final String password;
         private ProgressDialog dialog;
         private String content;
 
-        public LoginTask(String account, String password)
-        {
+        public LoginTask(String account, String password) {
             this.account = account;
             this.password = password;
             this.dialog = new ProgressDialog(MainActivity.this);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             this.dialog.setMessage(getString(R.string.please_wait));
             this.dialog.show();
         }
 
         @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            try
-            {
+        protected Boolean doInBackground(Void... params) {
+            try {
                 URL url = new URL("https://bzssurselva.azurewebsites.net/appservice.svc/Login");
                 HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
                 String userPassword = this.account + ":" + this.password;
@@ -199,13 +185,11 @@ public class MainActivity extends AppCompatActivity
                 connection.setUseCaches(false);
                 connection.connect();
                 int status = connection.getResponseCode();
-                if (status == 200 || status == 201)
-                {
+                if (status == 200 || status == 201) {
                     BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
-                    while ((line = br.readLine()) != null)
-                    {
+                    while ((line = br.readLine()) != null) {
                         sb.append(line).append("\n");
                     }
 
@@ -213,17 +197,11 @@ public class MainActivity extends AppCompatActivity
                     this.content = sb.toString();
                     return true;
                 }
-            }
-            catch (MalformedURLException e)
-            {
+            } catch (MalformedURLException e) {
                 return false;
-            }
-            catch (NullPointerException e)
-            {
+            } catch (NullPointerException e) {
                 return false;
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 return false;
             }
 
@@ -231,44 +209,39 @@ public class MainActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(final Boolean success)
-        {
+        protected void onPostExecute(final Boolean success) {
             loginTask = null;
             this.dialog.dismiss();
 
-            if (success)
-            {
-                try
-                {
+            if (success) {
+                try {
                     JSONObject json = new JSONObject(this.content);
                     ResultDto result = new ResultDto(json);
-                    if (result.getSuccess())
-                    {
+                    if (result.getSuccess()) {
                         CredentialHelper.setAccount(this.account);
                         CredentialHelper.setPassword(this.password);
                         displayLoginOrMainView();
-                    }
-                    else
-                    {
+                    } else {
                         displayAlert(getString(R.string.invalid_credentials));
                     }
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                     displayAlert(getString(R.string.unknown_error_occurred));
                 }
-            }
-            else
-            {
+            } else {
                 displayAlert(getString(R.string.unknown_error_occurred));
             }
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             loginTask = null;
             this.dialog.dismiss();
         }
     }
 }
+    /**
+     * Created by diggi on 22.02.2016.
+     */
+
+
+

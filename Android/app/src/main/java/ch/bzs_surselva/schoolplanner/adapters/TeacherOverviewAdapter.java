@@ -14,9 +14,6 @@ import ch.bzs_surselva.schoolplanner.R;
 import ch.bzs_surselva.schoolplanner.dto.TeacherDto;
 import ch.bzs_surselva.schoolplanner.dto.TeacherLookupDto;
 
-/**
- * Created by conrad on 21.02.2016.
- */
 public class TeacherOverviewAdapter extends ArrayAdapter<TeacherLookupDto>
 {
     public TeacherOverviewAdapter(Context context, ArrayList<TeacherLookupDto> data)
