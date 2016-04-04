@@ -52,16 +52,15 @@ public class TeacherActivity extends AppCompatActivity
             this.editTextCode = (EditText)findViewById(R.id.editTextCode);
             this.editTextCaption = (EditText)findViewById(R.id.editTextCaption);    // zeigt text von id an
 
-            // Lödt das Fach, sofern nötig.
             Intent intent = this.getIntent();
-            if (intent.hasExtra("Id"))
+            if (intent.hasExtra("Id") && intent.hasExtra("Code") && intent.hasExtra("Caption")) //Caption & Code noch übergeben
             {
                 String id = intent.getStringExtra("Id");
-                if (id != null)
-                {
-                    this.loadTask = new LoadTask(UUID.fromString(id));
-                    this.loadTask.execute((Void) null);
-                }
+                String code = intent.getStringExtra("Code");
+                String caption = intent.getStringExtra("Caption");
+                UUID uid = UUID.fromString(id);
+                TeacherDto m = new TeacherDto(uid, code, caption);
+                didLoadModel(m);
             }
         }
 
@@ -141,9 +140,7 @@ public class TeacherActivity extends AppCompatActivity
                     .setMessage(sb)
                     .setPositiveButton(this.getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.cancel();
-                                }
+                                public void onClick(DialogInterface dialog, int id) { dialog.cancel(); }
                             })
                     .show();
         }
@@ -289,7 +286,9 @@ public class TeacherActivity extends AppCompatActivity
                     wr.writeBytes(this.itemToSave.toJson().toString());
                     wr.flush();
                     wr.close();
+
                     int status = connection.getResponseCode();
+
                     if (status == 200 || status == 201)
                     {
                         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -328,7 +327,7 @@ public class TeacherActivity extends AppCompatActivity
                 this.dialog.dismiss();
 
                 if (success)
-                {
+
                     try
                     {
                         JSONObject json = new JSONObject(this.content);
@@ -346,7 +345,7 @@ public class TeacherActivity extends AppCompatActivity
                     {
                         displaySaveAlert(getString(R.string.unknown_error_occurred));
                     }
-                }
+
                 else
                 {
                     displaySaveAlert(getString(R.string.unknown_error_occurred));

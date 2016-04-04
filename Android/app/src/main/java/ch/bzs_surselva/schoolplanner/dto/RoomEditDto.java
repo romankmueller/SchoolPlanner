@@ -31,6 +31,7 @@ public final class RoomEditDto extends ItemDtoBase
         this.setCode(code);
         this.setCaption(caption);
     }
+
     public RoomEditDto(JSONObject json)
     {
         super(json);

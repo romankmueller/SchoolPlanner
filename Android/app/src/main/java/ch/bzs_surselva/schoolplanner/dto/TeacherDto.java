@@ -21,8 +21,8 @@ public class TeacherDto extends ItemDtoBase
     public TeacherDto()
     {
         super();
-        this.code = "";
         this.caption = "";
+        this.code = "";
     }
 
     public TeacherDto(UUID id, String code, String caption)
@@ -74,11 +74,11 @@ public class TeacherDto extends ItemDtoBase
         {
             json.put(JsonCode, this.code);
             json.put(JsonCaption, this.caption);
+
         }
-        catch (JSONException e)
+        catch(JSONException e)
         {
         }
-
         return json;
     }
 }
