@@ -35,7 +35,6 @@ public class RoomEditActivity extends AppCompatActivity
 {
     private EditText editTextCode;
     private EditText editTextCaption;
-    private LoadTask loadTask;
     private SaveTask saveTask;
     private RoomEditDto model;
 
@@ -50,15 +49,14 @@ public class RoomEditActivity extends AppCompatActivity
         this.editTextCaption = (EditText)this.findViewById(R.id.editTextCaption);
 
         Intent intent = this.getIntent();
-        if (intent.hasExtra("Id"))
+        if (intent.hasExtra("Id") && intent.hasExtra("Code") && intent.hasExtra("Caption")) //Caption & Code noch übergeben
         {
             String id = intent.getStringExtra("Id");
-            if(id != null)
-            {
-                this.loadTask = new LoadTask(UUID.fromString(id));
-                this.loadTask.execute((Void) null);
-
-            }
+            String code = intent.getStringExtra("Code");
+            String caption = intent.getStringExtra("Caption");
+            UUID uid = UUID.fromString(id);
+            RoomEditDto m = new RoomEditDto(uid, code, caption);
+            didLoadModel(m);
         }
     }
     @Override
@@ -138,94 +136,6 @@ public class RoomEditActivity extends AppCompatActivity
                         })
                 .show();
 
-    }
-
-    public class LoadTask extends AsyncTask< Void, Void, Boolean>
-    {
-        private final UUID idToLoad;
-        private ProgressDialog dialog;
-        private String content;
-
-        public LoadTask(UUID idToLoad)
-        {
-           this.idToLoad = idToLoad;
-            this.dialog = new ProgressDialog(RoomEditActivity.this);
-        }
-
-        @Override
-        protected void onPreExecute()
-        {
-            this.dialog.setMessage(getString(R.string.please_wait));
-            this.dialog.show();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void...params)
-        {
-            try
-            {
-                HttpsURLConnection connection = RequestHelper.createRequest("GetRoom/"+ this.idToLoad.toString(), "GET");
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
-                connection.connect();
-                int status = connection.getResponseCode();
-                        if(status == 200 || status == 201)
-                        {
-                            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                            StringBuilder sb = new StringBuilder();
-                            String line;
-                            while ((line = br.readLine()) != null)
-                            {
-                                sb.append(line).append("\n");
-                            }
-                            br.close();
-                            this.content = sb.toString();
-                            return true;
-                        }
-            }
-            catch (MalformedURLException e )
-            {
-                return false;
-            }
-            catch (NullPointerException e )
-            {
-                return false;
-            }
-            catch (IOException e )
-            {
-                return false;
-            }
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success)
-        {
-            loadTask = null;
-            this.dialog.dismiss();
-
-            if (success)
-            {
-                JSONObject json = null;
-                try
-                {
-                    json = new JSONObject(this.content);
-                }
-                catch (JSONException e)
-                {
-                }
-                if (json != null)
-                {
-                    didLoadModel(new RoomEditDto(json));
-                }
-            }
-        }
-        @Override
-        protected void onCancelled()
-        {
-            loadTask = null;
-            this.dialog.dismiss();
-        }
     }
 
     public class SaveTask extends AsyncTask<Void, Void, Boolean>

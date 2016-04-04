@@ -58,7 +58,7 @@ public class RoomOverviewActivity extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
                 RoomLookupDto value = (RoomLookupDto) adapter.getItemAtPosition(position);
-                editRoom(value.getId());
+                editRoom(value.getId(), value.getCode(), value.getCaption());
             }
         });
         this.alertBuilder = new AlertDialog.Builder(this);
@@ -133,9 +133,11 @@ public class RoomOverviewActivity extends AppCompatActivity
         this.startActivity(intent);
     }
 
-    private void editRoom(UUID id) {
+    private void editRoom(UUID id, String code, String caption) {
         Intent intent = new Intent(this, RoomEditActivity.class);
         intent.putExtra("Id", id.toString());
+        intent.putExtra("Code", code);
+        intent.putExtra("Caption", caption);
         this.startActivity(intent);
     }
 
