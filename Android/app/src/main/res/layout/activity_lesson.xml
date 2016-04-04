@@ -55,32 +55,21 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/editTextSubject"
-                android:hint="@string/subject" />
-
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinnerSubject"
-                android:prompt="@string/subject"/>
+                android:prompt="@string/subject" />
 
-            <EditText
+            <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:id="@+id/editTextTeacher"
-                android:hint="@string/teacher"
-                android:inputType="textPersonName" />
+                android:id="@+id/spinnerTeacher" />
 
-            <EditText
-                android:layout_width="fill_parent"
+            <Spinner
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/editTextRoom"
-                android:hint="@string/room"
-                android:inputType="textNoSuggestions" />
+                android:id="@+id/spinnerRoom" />
 
             <EditText
                 android:layout_width="fill_parent"
