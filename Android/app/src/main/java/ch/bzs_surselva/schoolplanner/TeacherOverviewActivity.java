@@ -123,8 +123,6 @@ public class TeacherOverviewActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
-
     @Override
     public void onResume()
     {
