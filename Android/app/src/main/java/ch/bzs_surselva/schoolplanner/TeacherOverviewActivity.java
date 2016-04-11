@@ -38,9 +38,6 @@ import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
 import ch.bzs_surselva.schoolplanner.dto.TeacherLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
-/**
- * Created by conrad on 21.02.2016.
- */
 public class TeacherOverviewActivity extends AppCompatActivity
 {
     private LoadTask loadTask;
@@ -65,7 +62,7 @@ public class TeacherOverviewActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
             {
                 TeacherLookupDto value = (TeacherLookupDto) adapter.getItemAtPosition(position);
-                editTeacher(value.getId());
+                editTeacher(value);
             }
         });
 
@@ -154,10 +151,12 @@ public class TeacherOverviewActivity extends AppCompatActivity
         this.startActivity(intent);
     }
 
-    private void editTeacher(UUID id)
+    private void editTeacher(TeacherLookupDto item)
     {
         Intent intent = new Intent(this, TeacherActivity.class);
-        intent.putExtra("Id", id.toString());
+        intent.putExtra("Id", item.getId().toString());
+        intent.putExtra("Caption", item.getCaption());
+        intent.putExtra("Code", item.getCode());
         this.startActivity(intent);
     }
 

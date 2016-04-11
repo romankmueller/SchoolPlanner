@@ -59,7 +59,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
             {
                 SubjectLookupDto value = (SubjectLookupDto) adapter.getItemAtPosition(position);
-                editSubject(value.getId());
+                editSubject(value);
             }
         });
 
@@ -146,10 +146,12 @@ public class SubjectOverviewActivity extends AppCompatActivity
         this.startActivity(intent);
     }
 
-    private void editSubject(UUID id)
+    private void editSubject(SubjectLookupDto item)
     {
         Intent intent = new Intent(this, SubjectEditActivity.class);
-        intent.putExtra("Id", id.toString());
+        intent.putExtra("Id", item.getId().toString());
+        intent.putExtra("Code", item.getCode());
+        intent.putExtra("Caption", item.getCaption());
         this.startActivity(intent);
     }
 

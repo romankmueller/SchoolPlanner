@@ -47,14 +47,14 @@ public class SubjectEditActivity extends AppCompatActivity
 
         // Lödt das Fach, sofern nötig.
         Intent intent = this.getIntent();
-        if (intent.hasExtra("Id"))
+        if (intent.hasExtra("Id") && intent.hasExtra("Code") && intent.hasExtra("Caption"))
         {
             String id = intent.getStringExtra("Id");
-            if (id != null)
-            {
-                this.loadTask = new LoadTask(UUID.fromString(id));
-                this.loadTask.execute((Void) null);
-            }
+            String code = intent.getStringExtra("Code");
+            String caption = intent.getStringExtra("Caption");
+            UUID uid = UUID.fromString(id);
+            SubjectEditDto m = new SubjectEditDto(uid, code, caption);
+            didLoadModel(m);
         }
     }
 
