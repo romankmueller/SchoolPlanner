@@ -102,7 +102,6 @@ namespace Bzs.Server.ServerService
                 entity.Caption = itemToSave.Caption.Length > 50 ? itemToSave.Caption.Substring(0, 49) : itemToSave.Caption;
                 entity.ModDate = DateTime.Now;
                 entity.ModUser = Environment.UserName;
-                ctx.RoomSet.Add(entity);
 
                 ctx.SaveChanges();
                 result.Success = true;
