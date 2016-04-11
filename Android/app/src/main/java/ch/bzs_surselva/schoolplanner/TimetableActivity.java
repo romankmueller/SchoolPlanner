@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -32,23 +36,28 @@ import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 public class TimetableActivity extends AppCompatActivity
 {
     private LoadTask loadTask;
+    private Calendar datum;
     private LessonOverviewAdapter adapter;
+    private TextView textViewDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_timetable);
+        this.datum = Calendar.getInstance();
+
 
         ArrayList<LessonDisplayDto> data = new ArrayList<>();
         this.adapter = new LessonOverviewAdapter(this, data);
         ListView listViewLesson = (ListView) findViewById(R.id.listViewLesson);
+        this.textViewDay = (TextView) findViewById(R.id.textViewDay);
+        String text = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+        this.textViewDay.setText(text);
         listViewLesson.setAdapter(this.adapter);
-        listViewLesson.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listViewLesson.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
-            {
+            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
                 LessonDisplayDto value = (LessonDisplayDto) adapter.getItemAtPosition(position);
                 showLesson(value.getId());
             }
@@ -78,11 +87,29 @@ public class TimetableActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+
+
+    public void OnClickLeftButton (View v) {
+        this.datum.add(Calendar.DAY_OF_MONTH, -1);
+
+        String text = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+        this.textViewDay.setText(text);
+    }
+
+    public void OnClickRightButton (View v) {
+        this.datum.add(Calendar.DAY_OF_MONTH, 1);
+
+        String text = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+        this.textViewDay.setText(text);
+
+    }
+
     @Override
     public void onResume() {
         super.onResume();
 
-        this.refreshData();
+     //   this.refreshData();
     }
 
     private void refreshData()
@@ -195,3 +222,5 @@ public class TimetableActivity extends AppCompatActivity
         }
     }
 }
+
+
