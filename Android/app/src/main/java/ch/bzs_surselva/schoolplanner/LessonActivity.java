@@ -23,64 +23,71 @@ import java.util.Comparator;
 import javax.net.ssl.HttpsURLConnection;
 
 import ch.bzs_surselva.schoolplanner.dto.DayLookupDto;
+import ch.bzs_surselva.schoolplanner.dto.RoomLookupDto;
 import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
+import ch.bzs_surselva.schoolplanner.dto.TeacherLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
-public class LessonActivity extends AppCompatActivity
-{
+public class LessonActivity extends AppCompatActivity {
     private LoadDayLookupTask loadDayLookupTask;
     private LoadSubjectLookupTask loadSubjectLookupTask;
+    private LoadTeacherLookupTask loadTeacherLookupTask;
+    private LoadRoomLookupTask loadRoomLookupTask;
     private Spinner spinnerDay;
     private Spinner spinnerSubject;
+    private Spinner spinnerTeacher;
+    private Spinner spinnerRoom;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_lesson);
 
-        this.spinnerDay = (Spinner)this.findViewById(R.id.spinnerDay);
-        this.spinnerSubject = (Spinner)this.findViewById(R.id.spinnerSubject);
+        this.spinnerDay = (Spinner) this.findViewById(R.id.spinnerDay);
+        this.spinnerSubject = (Spinner) this.findViewById(R.id.spinnerSubject);
+        this.spinnerTeacher = (Spinner) this.findViewById(R.id.spinnerTeacher);
+        this.spinnerRoom = (Spinner) this.findViewById(R.id.spinnerRoom);
 
         this.loadDayLookupTask = new LoadDayLookupTask();
         this.loadDayLookupTask.execute((Void) null);
 
         this.loadSubjectLookupTask = new LoadSubjectLookupTask();
         this.loadSubjectLookupTask.execute((Void) null);
-    }
+
+        this.loadTeacherLookupTask = new LoadTeacherLookupTask();
+        this.loadTeacherLookupTask.execute((Void) null);
+
+        this.loadRoomLookupTask = new LoadRoomLookupTask();
+        this.loadRoomLookupTask.execute((Void) null);
+}
+
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         this.getMenuInflater().inflate(R.menu.menu_lesson, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_save)
-        {
+        if (id == R.id.action_save) {
             return true;
         }
 
-        if (id == R.id.action_delete)
-        {
+        if (id == R.id.action_delete) {
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void didLoadDayLookup(ArrayList<DayLookupDto> dayLookupData)
-    {
-        Collections.sort(dayLookupData, new Comparator<DayLookupDto>()
-        {
+
+    private void didLoadDayLookup(ArrayList<DayLookupDto> dayLookupData) {
+        Collections.sort(dayLookupData, new Comparator<DayLookupDto>() {
             @Override
-            public int compare(DayLookupDto lhs, DayLookupDto rhs)
-            {
+            public int compare(DayLookupDto lhs, DayLookupDto rhs) {
                 return lhs.getOrder() - rhs.getOrder();
             }
         });
@@ -90,13 +97,10 @@ public class LessonActivity extends AppCompatActivity
         this.spinnerDay.setAdapter(spinnerDayArrayAdapter);
     }
 
-    private void didLoadSubjectLookup(ArrayList<SubjectLookupDto> subjectLookupData)
-    {
-        Collections.sort(subjectLookupData, new Comparator<SubjectLookupDto>()
-        {
+    private void didLoadSubjectLookup(ArrayList<SubjectLookupDto> subjectLookupData) {
+        Collections.sort(subjectLookupData, new Comparator<SubjectLookupDto>() {
             @Override
-            public int compare(SubjectLookupDto lhs, SubjectLookupDto rhs)
-            {
+            public int compare(SubjectLookupDto lhs, SubjectLookupDto rhs) {
                 return lhs.getCode().compareTo(rhs.getCode());
             }
         });
@@ -106,39 +110,60 @@ public class LessonActivity extends AppCompatActivity
         this.spinnerSubject.setAdapter(spinnerSubjectArrayAdapter);
     }
 
-    public class LoadDayLookupTask extends AsyncTask<Void, Void, Boolean>
-    {
+    private void didLoadTeacherLookup(ArrayList<TeacherLookupDto> teacherItems) {
+
+        Collections.sort(teacherItems, new Comparator<TeacherLookupDto>() {
+            @Override
+            public int compare(TeacherLookupDto lhs, TeacherLookupDto rhs) {
+                return lhs.getCode().compareTo(rhs.getCode());
+            }
+        });
+
+        ArrayAdapter<TeacherLookupDto> spinnerTeacherArrayAdapter = new ArrayAdapter<TeacherLookupDto>(this, android.R.layout.simple_spinner_item, teacherItems);
+        spinnerTeacherArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.spinnerTeacher.setAdapter(spinnerTeacherArrayAdapter);
+    }
+
+    private void didLoadRoomLookup(ArrayList<RoomLookupDto> RoomItems) {
+
+        Collections.sort(RoomItems, new Comparator<RoomLookupDto>() {
+            @Override
+            public int compare(RoomLookupDto lhs, RoomLookupDto rhs) {
+                return lhs.getCode().compareTo(rhs.getCode());
+            }
+        });
+
+        ArrayAdapter<RoomLookupDto> spinnerRoomArrayAdapter = new ArrayAdapter<RoomLookupDto>(this, android.R.layout.simple_spinner_item, RoomItems);
+        spinnerRoomArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        this.spinnerRoom.setAdapter(spinnerRoomArrayAdapter);
+    }
+
+    public class LoadDayLookupTask extends AsyncTask<Void, Void, Boolean> {
         private ProgressDialog dialog;
         private String content;
 
-        public LoadDayLookupTask()
-        {
+        public LoadDayLookupTask() {
             this.dialog = new ProgressDialog(LessonActivity.this);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             this.dialog.setMessage(getString(R.string.please_wait));
             this.dialog.show();
         }
 
         @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            try
-            {
+        protected Boolean doInBackground(Void... params) {
+            try {
                 HttpsURLConnection connection = RequestHelper.createRequest("GetDayLookup", "GET");
                 connection.setRequestProperty("Accept", "application/json");
                 connection.connect();
                 int status = connection.getResponseCode();
-                if (status == 200 || status == 201)
-                {
+                if (status == 200 || status == 201) {
                     BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
-                    while ((line = br.readLine()) != null)
-                    {
+                    while ((line = br.readLine()) != null) {
                         sb.append(line).append("\n");
                     }
 
@@ -146,17 +171,11 @@ public class LessonActivity extends AppCompatActivity
                     this.content = sb.toString();
                     return true;
                 }
-            }
-            catch (MalformedURLException e)
-            {
+            } catch (MalformedURLException e) {
                 return false;
-            }
-            catch (NullPointerException e)
-            {
+            } catch (NullPointerException e) {
                 return false;
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 return false;
             }
 
@@ -164,24 +183,18 @@ public class LessonActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(final Boolean success)
-        {
+        protected void onPostExecute(final Boolean success) {
             loadDayLookupTask = null;
             this.dialog.dismiss();
 
-            if (success)
-            {
+            if (success) {
                 ArrayList<DayLookupDto> dayItems = new ArrayList<DayLookupDto>();
-                try
-                {
+                try {
                     JSONArray jsonArray = new JSONArray(this.content);
-                    for (int i = 0; i < jsonArray.length(); i++)
-                    {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         dayItems.add(new DayLookupDto(jsonArray.getJSONObject(i)));
                     }
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                 }
 
                 didLoadDayLookup(dayItems);
@@ -189,64 +202,51 @@ public class LessonActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             loadDayLookupTask = null;
             this.dialog.dismiss();
         }
     }
 
-    public class LoadSubjectLookupTask extends AsyncTask<Void, Void, Boolean>
-    {
+    public class LoadSubjectLookupTask extends AsyncTask<Void, Void, Boolean> {
         private ProgressDialog dialog;
         private String content;
 
-        public LoadSubjectLookupTask()
-        {
+        public LoadSubjectLookupTask() {
             this.dialog = new ProgressDialog(LessonActivity.this);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             this.dialog.setMessage(getString(R.string.please_wait));
             this.dialog.show();
         }
 
         @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            try
-            {
+        protected Boolean doInBackground(Void... params) {
+            try {
                 HttpsURLConnection connection = RequestHelper.createRequest("GetSubjectLookup", "GET");
                 connection.setRequestProperty("Accept", "application/json");
                 connection.connect();
                 int status = connection.getResponseCode();
-                if (status == 200 || status == 201)
-                {
+                if (status == 200 || status == 201) {
                     BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
-                    while ((line = br.readLine()) != null)
-                    {
+                    while ((line = br.readLine()) != null) {
                         sb.append(line).append("\n");
                     }
+
 
                     br.close();
                     this.content = sb.toString();
                     return true;
                 }
-            }
-            catch (MalformedURLException e)
-            {
+            } catch (MalformedURLException e) {
                 return false;
-            }
-            catch (NullPointerException e)
-            {
+            } catch (NullPointerException e) {
                 return false;
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 return false;
             }
 
@@ -254,24 +254,18 @@ public class LessonActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(final Boolean success)
-        {
+        protected void onPostExecute(final Boolean success) {
             loadSubjectLookupTask = null;
             this.dialog.dismiss();
 
-            if (success)
-            {
+            if (success) {
                 ArrayList<SubjectLookupDto> subjectItems = new ArrayList<SubjectLookupDto>();
-                try
-                {
+                try {
                     JSONArray jsonArray = new JSONArray(this.content);
-                    for (int i = 0; i < jsonArray.length(); i++)
-                    {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         subjectItems.add(new SubjectLookupDto(jsonArray.getJSONObject(i)));
                     }
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                 }
 
                 didLoadSubjectLookup(subjectItems);
@@ -279,9 +273,158 @@ public class LessonActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onCancelled()
-        {
-            loadSubjectLookupTask = null;
+        protected void onCancelled() {
+            Object loadTeacherLookupTask = null;
+            this.dialog.dismiss();
+        }
+
+
+    }
+
+    public class LoadTeacherLookupTask extends AsyncTask<Void, Void, Boolean> {
+        private ProgressDialog dialog;
+        private String content;
+
+        public LoadTeacherLookupTask() {
+            this.dialog = new ProgressDialog(LessonActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setMessage(getString(R.string.please_wait));
+            this.dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                HttpsURLConnection connection = RequestHelper.createRequest("GetTeacherLookup", "GET");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.connect();
+                int status = connection.getResponseCode();
+                if (status == 200 || status == 201) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+
+
+                    br.close();
+                    this.content = sb.toString();
+                    return true;
+                }
+            } catch (MalformedURLException e) {
+                return false;
+            } catch (NullPointerException e) {
+                return false;
+            } catch (IOException e) {
+                return false;
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            Object loadTeacherLookupTask = null;
+            this.dialog.dismiss();
+
+            if (success) {
+                ArrayList<TeacherLookupDto> teacherItems = new ArrayList<TeacherLookupDto>();
+                try {
+                    JSONArray jsonArray = new JSONArray(this.content);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        teacherItems.add(new TeacherLookupDto(jsonArray.getJSONObject(i)));
+                    }
+                } catch (JSONException e) {
+                }
+
+                didLoadTeacherLookup(teacherItems);
+            }
+        }
+
+
+
+
+        @Override
+        protected void onCancelled() {
+            Object loadRoomLookupTask = null;
+            this.dialog.dismiss();
+        }
+
+
+
+
+    }
+
+    public class LoadRoomLookupTask extends AsyncTask<Void, Void, Boolean> {
+        private ProgressDialog dialog;
+        private String content;
+
+        public LoadRoomLookupTask() {
+            this.dialog = new ProgressDialog(LessonActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setMessage(getString(R.string.please_wait));
+            this.dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                HttpsURLConnection connection = RequestHelper.createRequest("GetRoomLookup", "GET");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.connect();
+                int status = connection.getResponseCode();
+                if (status == 200 || status == 201) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+
+                    br.close();
+                    this.content = sb.toString();
+                    return true;
+                }
+            } catch (MalformedURLException e) {
+                return false;
+            } catch (NullPointerException e) {
+                return false;
+            } catch (IOException e) {
+                return false;
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            loadRoomLookupTask = null;
+            this.dialog.dismiss();
+
+            if (success) {
+                ArrayList<RoomLookupDto> roomItems = new ArrayList<RoomLookupDto>();
+                try {
+                    JSONArray jsonArray = new JSONArray(this.content);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        roomItems.add(new RoomLookupDto(jsonArray.getJSONObject(i)));
+                    }
+                } catch (JSONException e) {
+                }
+
+                didLoadRoomLookup(roomItems);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            loadRoomLookupTask = null;
             this.dialog.dismiss();
         }
     }

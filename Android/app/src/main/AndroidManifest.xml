@@ -58,21 +58,67 @@
         <activity
             android:name=".SubjectEditActivity"
             android:label="@string/title_activity_subject_edit"
-            android:parentActivityName=".SubjectOverviewActivity" >
+            android:parentActivityName=".SubjectEditActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="ch.bzs_surselva.schoolplanner.SubjectOverviewActivity" />
         </activity>
         <activity
             android:name=".SubjectOverviewActivity"
-            android:label=""
-            android:parentActivityName=".MainActivity" >
+            android:label="Subject Overview"
+            android:parentActivityName=".MasterDataActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="ch.bzs_surselva.schoolplanner.MainActivity" />
+                android:value="ch.bzs_surselva.schoolplanner.MasterDataActivity" />
         </activity>
-        <activity android:name=".MasterDataActivity" >
+
+
+        <activity
+            android:name=".TeacherActivity"
+            android:label="@string/title_activity_teacher"
+            android:parentActivityName=".TeacherOverviewActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.bzs_surselva.schoolplanner.TeacherOverviewActivity" />
         </activity>
+
+        <activity
+            android:name=".TeacherOverviewActivity"
+            android:label="@string/title_activity_teacher_overview"
+            android:parentActivityName=".MasterDataActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.bzs_surselva.schoolplanner.MasterDataActivity" />
+        </activity>
+
+        <activity android:name=".RoomEditActivity"
+            android:label="@string/title_activity_room_edit"
+            android:parentActivityName=".RoomOverviewActivity">
+             <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                 android:value="ch.bzs_surselva.schoolplanner.RoomOverviewActivity"/>
+         </activity>
+
+        <activity android:name=".RoomOverviewActivity"
+            android:label="Room Overview"
+            android:parentActivityName=".MasterDataActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.bzs_surselva.schoolplanner.MasterDataActivity">
+            </meta-data>
+        </activity>
+
+        <activity android:name=".MasterDataActivity"
+            android:label="MasterData"
+            android:parentActivityName=".TimetableActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.bzs_surselva.schoolplanner.TimetableActivity">
+            </meta-data>
+
+        </activity>
+
+
     </application>
 
 </manifest>

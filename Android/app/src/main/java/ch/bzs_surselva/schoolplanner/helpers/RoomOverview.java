@@ -1,12 +1,12 @@
-package ch.bzs_surselva.schoolplanner;
+package ch.bzs_surselva.schoolplanner.helpers;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,24 +18,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import ch.bzs_surselva.schoolplanner.R;
+import ch.bzs_surselva.schoolplanner.SubjectEditActivity;
 import ch.bzs_surselva.schoolplanner.adapters.SubjectOverviewAdapter;
-import ch.bzs_surselva.schoolplanner.dto.IdDto;
 import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
-import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
-public class SubjectOverviewActivity extends AppCompatActivity
+/**
+ * Created by diggi on 22.02.2016.
+ */
+
+public class RoomOverview extends AppCompatActivity
 {
     private LoadTask loadTask;
     private DeleteTask deleteTask;
@@ -135,7 +135,6 @@ public class SubjectOverviewActivity extends AppCompatActivity
 
     private void didLoadModel(ArrayList<SubjectLookupDto> loadedData)
     {
-        this.adapter.clear();
         this.adapter.addAll(loadedData);
         this.adapter.notifyDataSetChanged();
     }
@@ -171,7 +170,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
 
         public LoadTask()
         {
-            this.dialog = new ProgressDialog(SubjectOverviewActivity.this);
+            this.dialog = new ProgressDialog(RoomOverview.this);
         }
 
         @Override
@@ -243,36 +242,19 @@ public class SubjectOverviewActivity extends AppCompatActivity
                 {
                 }
             }
-            Collections.sort(loadedData, new Comparator<SubjectLookupDto>()
-            {
-                @Override
-                public int compare(SubjectLookupDto p1, SubjectLookupDto p2)
-                {
-                    return p1.getCaption().compareTo(p2.getCaption());
-                }
-            });
 
-            Collections.sort(loadedData, new Comparator<SubjectLookupDto>()
-            {
-                @Override
-                public int compare(SubjectLookupDto p1, SubjectLookupDto p2)
-                {
-
-
-                    return p1.getCaption().compareTo(p2.getCaption());
-                }
-            });
             didLoadModel(loadedData);
-                }
+        }
 
-                @Override
-                protected void onCancelled() {
-                    loadTask = null;
-                    this.dialog.dismiss();
-                }
-            }
+        @Override
+        protected void onCancelled()
+        {
+            loadTask = null;
+            this.dialog.dismiss();
+        }
+    }
 
-            public class DeleteTask extends AsyncTask<Void, Void, Boolean>
+    public class DeleteTask extends AsyncTask<Void, Void, Boolean>
     {
         private UUID idToDelete;
         private ProgressDialog dialog;
@@ -281,7 +263,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
         public DeleteTask(UUID idToDelete)
         {
             this.idToDelete = idToDelete;
-            this.dialog = new ProgressDialog(SubjectOverviewActivity.this);
+            this.dialog = new ProgressDialog(RoomOverview.this);
         }
 
         @Override
@@ -296,16 +278,9 @@ public class SubjectOverviewActivity extends AppCompatActivity
         {
             try
             {
-                HttpsURLConnection connection = RequestHelper.createRequest("DeleteSubject", "DELETE");
-                connection.setRequestProperty("Content-Type", "application/json");
+                HttpsURLConnection connection = RequestHelper.createRequest("DeleteSubject/" + this.idToDelete.toString(), "DELETE");
                 connection.setRequestProperty("Accept", "application/json");
-                connection.setDoOutput(true);
-                OutputStream stream = connection.getOutputStream();
-                DataOutputStream wr = new DataOutputStream(stream);
-                String json = new IdDto(this.idToDelete).toJson().toString();
-                wr.writeBytes(json);
-                wr.flush();
-                wr.close();
+                connection.connect();
                 int status = connection.getResponseCode();
                 if (status == 200 || status == 201)
                 {
@@ -351,7 +326,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
                     JSONObject json = new JSONObject(this.content);
                     if (json.getBoolean("Success") == false)
                     {
-                        refreshData();
+                        //json.getString("Error");
                     }
                 }
                 catch (JSONException e)
@@ -370,3 +345,4 @@ public class SubjectOverviewActivity extends AppCompatActivity
         }
     }
 }
+

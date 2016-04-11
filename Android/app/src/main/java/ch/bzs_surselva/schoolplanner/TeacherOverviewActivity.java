@@ -5,8 +5,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,15 +31,21 @@ import java.util.UUID;
 import javax.net.ssl.HttpsURLConnection;
 
 import ch.bzs_surselva.schoolplanner.adapters.SubjectOverviewAdapter;
+import ch.bzs_surselva.schoolplanner.adapters.TeacherOverviewAdapter;
 import ch.bzs_surselva.schoolplanner.dto.IdDto;
+import ch.bzs_surselva.schoolplanner.dto.ResultDto;
 import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
+import ch.bzs_surselva.schoolplanner.dto.TeacherLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
-public class SubjectOverviewActivity extends AppCompatActivity
+/**
+ * Created by conrad on 21.02.2016.
+ */
+public class TeacherOverviewActivity extends AppCompatActivity
 {
     private LoadTask loadTask;
     private DeleteTask deleteTask;
-    private SubjectOverviewAdapter adapter;
+    private TeacherOverviewAdapter adapter;
     private AlertDialog.Builder alertBuilder;
     private UUID deleteId;
 
@@ -47,30 +53,30 @@ public class SubjectOverviewActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_subject_overview);
+        setContentView(R.layout.activity_teacher_overview);
 
-        ArrayList<SubjectLookupDto> data = new ArrayList<>();
-        this.adapter = new SubjectOverviewAdapter(this, data);
-        ListView listViewSubject = (ListView) findViewById(R.id.listViewSubject);
-        listViewSubject.setAdapter(this.adapter);
-        listViewSubject.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        ArrayList<TeacherLookupDto> data = new ArrayList<>();
+        this.adapter = new TeacherOverviewAdapter(this, data);
+        ListView listViewTeacher = (ListView) findViewById(R.id.listViewTeacher);
+        listViewTeacher.setAdapter(this.adapter);
+        listViewTeacher.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
             {
-                SubjectLookupDto value = (SubjectLookupDto) adapter.getItemAtPosition(position);
-                editSubject(value.getId());
+                TeacherLookupDto value = (TeacherLookupDto) adapter.getItemAtPosition(position);
+                editTeacher(value.getId());
             }
         });
 
         this.alertBuilder = new AlertDialog.Builder(this);
-        this.alertBuilder.setMessage(this.getString(R.string.cc_would_you_like_to_delete_the_subject));
+        this.alertBuilder.setMessage(this.getString(R.string.cc_would_you_like_to_delete_the_teacher));
         this.alertBuilder.setPositiveButton(this.getString(R.string.cc_yes), new DialogInterface.OnClickListener()
         {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                deleteSubject(deleteId);
+                deleteTeacher(deleteId);
                 deleteId = null;
             }
         });
@@ -84,12 +90,12 @@ public class SubjectOverviewActivity extends AppCompatActivity
             }
         });
 
-        listViewSubject.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
+        listViewTeacher.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
         {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int arg2, long arg3)
             {
-                SubjectLookupDto item = (SubjectLookupDto) parent.getItemAtPosition(arg2);
+                TeacherLookupDto item = (TeacherLookupDto) parent.getItemAtPosition(arg2);
                 deleteId = item.getId();
                 AlertDialog dlg = alertBuilder.create();
                 dlg.show();
@@ -102,7 +108,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-        this.getMenuInflater().inflate(R.menu.menu_subject_overview, menu);
+        this.getMenuInflater().inflate(R.menu.menu_teacher_overview, menu);
         return true;
     }
 
@@ -113,12 +119,14 @@ public class SubjectOverviewActivity extends AppCompatActivity
 
         if (id == R.id.action_new)
         {
-            this.createSubject();
+            this.createTeacher();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     public void onResume()
@@ -133,30 +141,31 @@ public class SubjectOverviewActivity extends AppCompatActivity
         this.loadTask.execute((Void) null);
     }
 
-    private void didLoadModel(ArrayList<SubjectLookupDto> loadedData)
+    private void didLoadModel(ArrayList<TeacherLookupDto> loadedData)
     {
         this.adapter.clear();
         this.adapter.addAll(loadedData);
         this.adapter.notifyDataSetChanged();
     }
 
-    private void createSubject()
+    private void createTeacher()
     {
-        Intent intent = new Intent(this, SubjectEditActivity.class);
+        Intent intent = new Intent(this, TeacherActivity.class);
         this.startActivity(intent);
     }
 
-    private void editSubject(UUID id)
+    private void editTeacher(UUID id)
     {
-        Intent intent = new Intent(this, SubjectEditActivity.class);
+        Intent intent = new Intent(this, TeacherActivity.class);
         intent.putExtra("Id", id.toString());
         this.startActivity(intent);
     }
 
-    private void deleteSubject(UUID id)
+    private void deleteTeacher(UUID id)
     {
         this.deleteTask = new DeleteTask(id);
         this.deleteTask.execute((Void) null);
+
     }
 
     private void didDeleteModel()
@@ -171,7 +180,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
 
         public LoadTask()
         {
-            this.dialog = new ProgressDialog(SubjectOverviewActivity.this);
+            this.dialog = new ProgressDialog(TeacherOverviewActivity.this);
         }
 
         @Override
@@ -186,7 +195,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
         {
             try
             {
-                HttpsURLConnection connection = RequestHelper.createRequest("GetSubjectLookup", "GET");
+                HttpsURLConnection connection = RequestHelper.createRequest("GetTeacherLookup", "GET");
                 connection.setRequestProperty("Accept", "application/json");
                 connection.connect();
                 int status = connection.getResponseCode();
@@ -227,7 +236,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
             loadTask = null;
             this.dialog.dismiss();
 
-            ArrayList<SubjectLookupDto> loadedData = new ArrayList<>();
+            ArrayList<TeacherLookupDto> loadedData = new ArrayList<>();
             if (success)
             {
 
@@ -236,43 +245,35 @@ public class SubjectOverviewActivity extends AppCompatActivity
                     JSONArray json = new JSONArray(this.content);
                     for (int i = 0; i < json.length(); i++)
                     {
-                        loadedData.add(new SubjectLookupDto(json.getJSONObject(i)));
+                        loadedData.add(new TeacherLookupDto(json.getJSONObject(i)));
                     }
                 }
                 catch (JSONException e)
                 {
                 }
             }
-            Collections.sort(loadedData, new Comparator<SubjectLookupDto>()
+            Collections.sort(loadedData, new Comparator<TeacherLookupDto>()
             {
                 @Override
-                public int compare(SubjectLookupDto p1, SubjectLookupDto p2)
+                public int compare(TeacherLookupDto p1, TeacherLookupDto p2)
                 {
-                    return p1.getCaption().compareTo(p2.getCaption());
+                    return p1.getCaption().compareToIgnoreCase(p2.getCaption());
                 }
             });
 
-            Collections.sort(loadedData, new Comparator<SubjectLookupDto>()
-            {
-                @Override
-                public int compare(SubjectLookupDto p1, SubjectLookupDto p2)
-                {
 
-
-                    return p1.getCaption().compareTo(p2.getCaption());
-                }
-            });
             didLoadModel(loadedData);
-                }
+        }
 
-                @Override
-                protected void onCancelled() {
-                    loadTask = null;
-                    this.dialog.dismiss();
-                }
-            }
+        @Override
+        protected void onCancelled()
+        {
+            loadTask = null;
+            this.dialog.dismiss();
+        }
+    }
 
-            public class DeleteTask extends AsyncTask<Void, Void, Boolean>
+    public class DeleteTask extends AsyncTask<Void, Void, Boolean>
     {
         private UUID idToDelete;
         private ProgressDialog dialog;
@@ -281,7 +282,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
         public DeleteTask(UUID idToDelete)
         {
             this.idToDelete = idToDelete;
-            this.dialog = new ProgressDialog(SubjectOverviewActivity.this);
+            this.dialog = new ProgressDialog(TeacherOverviewActivity.this);
         }
 
         @Override
@@ -296,16 +297,17 @@ public class SubjectOverviewActivity extends AppCompatActivity
         {
             try
             {
-                HttpsURLConnection connection = RequestHelper.createRequest("DeleteSubject", "DELETE");
+                HttpsURLConnection connection = RequestHelper.createRequest("DeleteTeacher","DELETE");
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("Accept", "application/json");
                 connection.setDoOutput(true);
                 OutputStream stream = connection.getOutputStream();
                 DataOutputStream wr = new DataOutputStream(stream);
-                String json = new IdDto(this.idToDelete).toJson().toString();
+                String json = new IdDto( this.idToDelete).toJson().toString();
                 wr.writeBytes(json);
                 wr.flush();
                 wr.close();
+
                 int status = connection.getResponseCode();
                 if (status == 200 || status == 201)
                 {
@@ -346,13 +348,15 @@ public class SubjectOverviewActivity extends AppCompatActivity
 
             if (success)
             {
-                try
-                {
+                try {
                     JSONObject json = new JSONObject(this.content);
                     if (json.getBoolean("Success") == false)
                     {
                         refreshData();
+
+                        //json.getString("Error");
                     }
+
                 }
                 catch (JSONException e)
                 {
