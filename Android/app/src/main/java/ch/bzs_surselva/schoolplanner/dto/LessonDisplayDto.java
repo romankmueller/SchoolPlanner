@@ -4,6 +4,7 @@ import org.json.JSONObject;
 
 public class LessonDisplayDto extends ItemDtoBase
 {
+
     public LessonDisplayDto()
     {
         super();

@@ -59,7 +59,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
             public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
             {
                 SubjectLookupDto value = (SubjectLookupDto) adapter.getItemAtPosition(position);
-                editSubject(value.getId());
+                editSubject(value.getId(), value.getCode(), value.getCaption());
             }
         });
 
@@ -146,10 +146,12 @@ public class SubjectOverviewActivity extends AppCompatActivity
         this.startActivity(intent);
     }
 
-    private void editSubject(UUID id)
+    private void editSubject(UUID id, String code, String caption)
     {
         Intent intent = new Intent(this, SubjectEditActivity.class);
         intent.putExtra("Id", id.toString());
+        intent.putExtra("Code", code);
+        intent.putExtra("Caption", caption);
         this.startActivity(intent);
     }
 
@@ -272,7 +274,7 @@ public class SubjectOverviewActivity extends AppCompatActivity
                 }
             }
 
-            public class DeleteTask extends AsyncTask<Void, Void, Boolean>
+    public class DeleteTask extends AsyncTask<Void, Void, Boolean>
     {
         private UUID idToDelete;
         private ProgressDialog dialog;

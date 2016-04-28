@@ -65,7 +65,7 @@
         </activity>
         <activity
             android:name=".SubjectOverviewActivity"
-            android:label="Subject Overview"
+            android:label="@string/title_activity_subject_overview"
             android:parentActivityName=".MasterDataActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -100,7 +100,7 @@
          </activity>
 
         <activity android:name=".RoomOverviewActivity"
-            android:label="Room Overview"
+            android:label="@string/title_activity_room_overview"
             android:parentActivityName=".MasterDataActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -109,7 +109,7 @@
         </activity>
 
         <activity android:name=".MasterDataActivity"
-            android:label="MasterData"
+            android:label="@string/title_masterdata"
             android:parentActivityName=".TimetableActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

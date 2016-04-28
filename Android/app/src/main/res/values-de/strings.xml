@@ -21,6 +21,7 @@
     <string name="cc_subject">Fach</string>
     <string name="cc_subjects">Fächer</string>
     <string name="cc_teacher">Lehrer</string>
+    <string name="cc_would_you_like_to_delete_the_lesson">Willst du diese Lektion löschen?</string>
     <string name="cc_would_you_like_to_delete_the_subject">Willst du dieses Fach löschen?</string>
     <string name="cc_would_you_like_to_delete_the_teacher">Willst du diesen Lehrer löschen?</string>
     <string name="cc_would_you_like_to_delete_the_room">Willst du diesen Raum löschen?</string>
@@ -67,6 +68,8 @@
     <string name="to">bis</string>
     <string name="unknown_error_occurred">Unbekannter Fehler</string>
     <string name="version">Version</string>
+    <string name="cc_buttonLeft">Links</string>
+    <string name="cc_buttonEnd">Rechts</string>
 </resources>
 
 

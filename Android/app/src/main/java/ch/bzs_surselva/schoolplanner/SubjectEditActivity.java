@@ -31,7 +31,6 @@ import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 public class SubjectEditActivity extends AppCompatActivity
 {
     private SubjectEditDto model;
-    private LoadTask loadTask;
     private SaveTask saveTask;
     private EditText editTextCode;
     private EditText editTextCaption;
@@ -47,15 +46,17 @@ public class SubjectEditActivity extends AppCompatActivity
 
         // Lödt das Fach, sofern nötig.
         Intent intent = this.getIntent();
-        if (intent.hasExtra("Id"))
-        {
-            String id = intent.getStringExtra("Id");
-            if (id != null)
+        if (intent.hasExtra("Id") && intent.hasExtra("Code") && intent.hasExtra("Caption"))
+
             {
-                this.loadTask = new LoadTask(UUID.fromString(id));
-                this.loadTask.execute((Void) null);
+                String id = intent.getStringExtra("Id");
+                String code = intent.getStringExtra("Code");
+                String caption = intent.getStringExtra("Caption");
+                UUID uid = UUID.fromString(id);
+                SubjectEditDto m = new SubjectEditDto(uid, code, caption);
+                didLoadModel(m);
             }
-        }
+
     }
 
     @Override
@@ -141,97 +142,6 @@ public class SubjectEditActivity extends AppCompatActivity
                 .show();
     }
 
-    public class LoadTask extends AsyncTask<Void, Void, Boolean>
-    {
-        private final UUID idToLoad;
-        private ProgressDialog dialog;
-        private String content;
-
-        public LoadTask(UUID idToLoad)
-        {
-            this.idToLoad = idToLoad;
-            this.dialog = new ProgressDialog(SubjectEditActivity.this);
-        }
-
-        @Override
-        protected void onPreExecute()
-        {
-            this.dialog.setMessage(getString(R.string.please_wait));
-            this.dialog.show();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            try
-            {
-                HttpsURLConnection connection = RequestHelper.createRequest("GetSubject/" + this.idToLoad.toString(), "GET");
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
-                connection.connect();
-                int status = connection.getResponseCode();
-                if (status == 200 || status == 201)
-                {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null)
-                    {
-                        sb.append(line).append("\n");
-                    }
-
-                    br.close();
-                    this.content = sb.toString();
-                    return true;
-                }
-            }
-            catch (MalformedURLException e)
-            {
-                return false;
-            }
-            catch (NullPointerException e)
-            {
-                return false;
-            }
-            catch (IOException e)
-            {
-                return false;
-            }
-
-            return false;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success)
-        {
-            loadTask = null;
-            this.dialog.dismiss();
-
-            if (success)
-            {
-                JSONObject json = null;
-                try
-                {
-                     json = new JSONObject(this.content);
-                }
-                catch (JSONException e)
-                {
-                }
-
-                if (json != null)
-                {
-                    didLoadModel(new SubjectEditDto(json));
-                }
-            }
-        }
-
-        @Override
-        protected void onCancelled()
-        {
-            loadTask = null;
-            this.dialog.dismiss();
-        }
-    }
 
     public class SaveTask extends AsyncTask<Void, Void, Boolean>
     {

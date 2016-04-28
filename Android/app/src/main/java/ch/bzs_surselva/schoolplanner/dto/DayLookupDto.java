@@ -5,18 +5,18 @@ import org.json.JSONObject;
 
 public class DayLookupDto extends ItemDtoBase
 {
-    private final String JsonOrder = "Order";
+    //private final String JsonOrder = "";
     private final String JsonCode = "Code";
     private final String JsonCaption = "Caption";
 
-    private int order;
+    //private int order;
     private String code;
     private String caption;
 
     public DayLookupDto()
     {
         super();
-        this.order = 0;
+       // this.order = 0;
         this.code = "";
         this.caption = "";
     }
@@ -26,7 +26,7 @@ public class DayLookupDto extends ItemDtoBase
         super(json);
         try
         {
-            this.order = json.getInt(JsonOrder);
+           // this.order = json.getInt(JsonOrder);
             this.code = json.getString(JsonCode);
             this.caption = json.getString(JsonCaption);
         }
@@ -35,10 +35,10 @@ public class DayLookupDto extends ItemDtoBase
         }
     }
 
-    public int getOrder()
+    /*public int getOrder()
     {
         return this.order;
-    }
+    }*/
 
     public String getCode()
     {

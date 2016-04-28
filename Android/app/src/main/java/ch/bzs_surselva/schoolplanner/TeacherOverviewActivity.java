@@ -61,16 +61,19 @@ public class TeacherOverviewActivity extends AppCompatActivity
         listViewTeacher.setAdapter(this.adapter);
         listViewTeacher.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
+             // kurz anklicken holt position und inhalt des Arrays <TeacherLookupDto>
             @Override
             public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
             {
                 TeacherLookupDto value = (TeacherLookupDto) adapter.getItemAtPosition(position);
-                editTeacher(value.getId());
+                editTeacher(value.getId(), value.getCode(), value.getCaption());  // müsste man hier mit if abfragen wenn id leer oder besetz dann hole text?
             }
         });
 
         this.alertBuilder = new AlertDialog.Builder(this);
+
         this.alertBuilder.setMessage(this.getString(R.string.cc_would_you_like_to_delete_the_teacher));
+
         this.alertBuilder.setPositiveButton(this.getString(R.string.cc_yes), new DialogInterface.OnClickListener()
         {
             @Override
@@ -80,6 +83,7 @@ public class TeacherOverviewActivity extends AppCompatActivity
                 deleteId = null;
             }
         });
+
         this.alertBuilder.setNegativeButton(this.getString(R.string.cc_no), new DialogInterface.OnClickListener()
         {
             @Override
@@ -104,7 +108,6 @@ public class TeacherOverviewActivity extends AppCompatActivity
         });
 
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -125,8 +128,6 @@ public class TeacherOverviewActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @Override
     public void onResume()
@@ -154,10 +155,12 @@ public class TeacherOverviewActivity extends AppCompatActivity
         this.startActivity(intent);
     }
 
-    private void editTeacher(UUID id)
+    private void editTeacher(UUID id, String code, String caption)
     {
         Intent intent = new Intent(this, TeacherActivity.class);
         intent.putExtra("Id", id.toString());
+        intent.putExtra("Code", code);
+        intent.putExtra("Caption", caption);
         this.startActivity(intent);
     }
 
@@ -273,104 +276,104 @@ public class TeacherOverviewActivity extends AppCompatActivity
         }
     }
 
-    public class DeleteTask extends AsyncTask<Void, Void, Boolean>
+   public class DeleteTask extends AsyncTask<Void, Void, Boolean>
+{
+    private UUID idToDelete;
+    private ProgressDialog dialog;
+    private String content;
+
+    public DeleteTask(UUID idToDelete)
     {
-        private UUID idToDelete;
-        private ProgressDialog dialog;
-        private String content;
+        this.idToDelete = idToDelete;
+        this.dialog = new ProgressDialog(TeacherOverviewActivity.this);
+    }
 
-        public DeleteTask(UUID idToDelete)
-        {
-            this.idToDelete = idToDelete;
-            this.dialog = new ProgressDialog(TeacherOverviewActivity.this);
-        }
+    @Override
+    protected void onPreExecute()
+    {
+        this.dialog.setMessage(getString(R.string.please_wait));
+        this.dialog.show();
+    }
 
-        @Override
-        protected void onPreExecute()
+    @Override
+    protected Boolean doInBackground(Void... params)
+    {
+        try
         {
-            this.dialog.setMessage(getString(R.string.please_wait));
-            this.dialog.show();
-        }
+            HttpsURLConnection connection = RequestHelper.createRequest("DeleteTeacher","DELETE");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setDoOutput(true);
+            OutputStream stream = connection.getOutputStream();
+            DataOutputStream wr = new DataOutputStream(stream);
+            String json = new IdDto( this.idToDelete).toJson().toString();
+            wr.writeBytes(json);
+            wr.flush();
+            wr.close();
 
-        @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            try
+            int status = connection.getResponseCode();
+            if (status == 200 || status == 201)
             {
-                HttpsURLConnection connection = RequestHelper.createRequest("DeleteTeacher","DELETE");
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("Accept", "application/json");
-                connection.setDoOutput(true);
-                OutputStream stream = connection.getOutputStream();
-                DataOutputStream wr = new DataOutputStream(stream);
-                String json = new IdDto( this.idToDelete).toJson().toString();
-                wr.writeBytes(json);
-                wr.flush();
-                wr.close();
-
-                int status = connection.getResponseCode();
-                if (status == 200 || status == 201)
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = br.readLine()) != null)
                 {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    StringBuilder sb = new StringBuilder();
-                    String line;
-                    while ((line = br.readLine()) != null)
-                    {
-                        sb.append(line).append("\n");
-                    }
-
-                    br.close();
-                    this.content = sb.toString();
-                    return true;
+                    sb.append(line).append("\n");
                 }
-            }
-            catch (MalformedURLException e)
-            {
-                return false;
-            }
-            catch (NullPointerException e)
-            {
-                return false;
-            }
-            catch (IOException e)
-            {
-                return false;
-            }
 
+                br.close();
+                this.content = sb.toString();
+                return true;
+            }
+        }
+        catch (MalformedURLException e)
+        {
+            return false;
+        }
+        catch (NullPointerException e)
+        {
+            return false;
+        }
+        catch (IOException e)
+        {
             return false;
         }
 
-        @Override
-        protected void onPostExecute(final Boolean success)
-        {
-            deleteTask = null;
-            this.dialog.dismiss();
-
-            if (success)
-            {
-                try {
-                    JSONObject json = new JSONObject(this.content);
-                    if (json.getBoolean("Success") == false)
-                    {
-                        refreshData();
-
-                        //json.getString("Error");
-                    }
-
-                }
-                catch (JSONException e)
-                {
-                }
-            }
-
-            didDeleteModel();
-        }
-
-        @Override
-        protected void onCancelled()
-        {
-            deleteTask = null;
-            this.dialog.dismiss();
-        }
+        return false;
     }
+
+    @Override
+    protected void onPostExecute(final Boolean success)
+    {
+        deleteTask = null;
+        this.dialog.dismiss();
+
+        if (success)
+        {
+            try {
+                JSONObject json = new JSONObject(this.content);
+                if (json.getBoolean("Success") == false)
+                {
+                    refreshData();
+
+                    //json.getString("Error");
+                }
+
+            }
+            catch (JSONException e)
+            {
+            }
+        }
+
+        didDeleteModel();
+    }
+
+    @Override
+    protected void onCancelled()
+    {
+        deleteTask = null;
+        this.dialog.dismiss();
+    }
+}
 }

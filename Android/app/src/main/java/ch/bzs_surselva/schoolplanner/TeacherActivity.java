@@ -38,7 +38,6 @@ public class TeacherActivity extends AppCompatActivity
         private EditText editTextCode;
         private EditText editTextCaption;
         private TeacherDto model;
-        private LoadTask loadTask;
         private SaveTask saveTask;          // instanzvariablen initialisieren
 
 
@@ -47,10 +46,10 @@ public class TeacherActivity extends AppCompatActivity
         protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
-            this.setContentView(R.layout.activity_teacher);         // activity wird sichtbar gemacht oder auch nicht
+            this.setContentView(R.layout.activity_teacher);         // activity wird sichtbar gemacht
 
             this.editTextCode = (EditText)findViewById(R.id.editTextCode);
-            this.editTextCaption = (EditText)findViewById(R.id.editTextCaption);    // zeigt text von id an
+            this.editTextCaption = (EditText)findViewById(R.id.editTextCaption);    // holt und zeigt text von id an
 
             Intent intent = this.getIntent();
             if (intent.hasExtra("Id") && intent.hasExtra("Code") && intent.hasExtra("Caption")) //Caption & Code noch übergeben
@@ -63,28 +62,23 @@ public class TeacherActivity extends AppCompatActivity
                 didLoadModel(m);
             }
         }
-
         @Override
         public boolean onCreateOptionsMenu(Menu menu)
         {
             this.getMenuInflater().inflate(R.menu.menu_teacher, menu);
             return true;
         }
-
         @Override
         public boolean onOptionsItemSelected(MenuItem item)
         {
             int id = item.getItemId();
-
             if (id == R.id.action_save)
             {
                 this.saveChanges();
                 return true;
             }
-
             return super.onOptionsItemSelected(item);
         }
-
         private TeacherDto applyChanges(TeacherDto modelToApply)
         {
             modelToApply.setCode(this.editTextCode.getText().toString());
@@ -145,98 +139,7 @@ public class TeacherActivity extends AppCompatActivity
                     .show();
         }
 
-        public class LoadTask extends AsyncTask<Void, Void, Boolean>
-        {
-            private final UUID idToLoad;
-            private ProgressDialog dialog;
-            private String content;
 
-            public LoadTask(UUID idToLoad)
-            {
-                this.idToLoad = idToLoad;
-                this.dialog = new ProgressDialog(TeacherActivity.this);
-            }
-
-            @Override
-            protected void onPreExecute()
-            {
-                this.dialog.setMessage(getString(R.string.please_wait));
-                this.dialog.show();
-            }
-
-            @Override
-            protected Boolean doInBackground(Void... params)
-            {
-                try
-                {
-                    HttpsURLConnection connection = RequestHelper.createRequest("GetTeacher/" + this.idToLoad.toString(), "GET");
-                    connection.setRequestProperty("Content-Type", "application/json");
-                    connection.setRequestProperty("Accept", "application/json");
-                    connection.connect();
-                    int status = connection.getResponseCode();
-                    if (status == 200 || status == 201)
-                    {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null)
-                        {
-                            sb.append(line).append("\n");
-                        }
-
-                        br.close();
-                        this.content = sb.toString();
-                        return true;
-                    }
-                }
-                catch (MalformedURLException e)
-                {
-                    return false;
-                }
-                catch (NullPointerException e)
-                {
-                    return false;
-                }
-                catch (IOException e)
-                {
-                    return false;
-                }
-
-                return false;
-            }
-
-            @Override
-            protected void onPostExecute(final Boolean success)
-            {
-                loadTask = null;
-                this.dialog.dismiss();
-
-                if (success)
-                {
-                    JSONObject json = null;
-                    try
-                    {
-                        json = new JSONObject(this.content);
-                    }
-                    catch (JSONException e)
-                    {
-                    }
-
-                    if (json != null)
-                    {
-                        didLoadModel(new TeacherDto(json));
-                    }
-                }
-            }
-
-            @Override
-            protected void onCancelled()
-            {
-                loadTask = null;
-                this.dialog.dismiss();
-            }
-
-        }
 
         public class SaveTask extends AsyncTask<Void, Void, Boolean>
         {

@@ -18,6 +18,7 @@
     <string name="cc_subject">Subject</string>
     <string name="cc_subjects">Subjects</string>
     <string name="cc_teacher">Teachers</string>
+    <string name="cc_would_you_like_to_delete_the_lesson">Would you like to delete the lesson?</string>
     <string name="cc_would_you_like_to_delete_the_subject">Would you like to delete the subject?</string>
     <string name="cc_would_you_like_to_delete_the_teacher">Would you like to delete this teacher?</string>
     <string name="cc_would_you_like_to_delete_the_room">Would you like to delete the room?</string>
@@ -53,10 +54,13 @@
     <string name="title_activity_register">Register</string>
     <string name="title_activity_timetable">Timetable</string>
     <string name="title_activity_lesson">Lesson</string>
+    <string name="title_masterdata">MasterData</string>
     <string name="title_activity_subject_edit">Edit Subject</string>
+    <string name="title_activity_subject_overview">Subject Overview</string>
     <string name="title_activity_teacher"> Edit Teacher</string>
     <string name="title_activity_teacher_overview">Teacher Overview</string>
     <string name="title_activity_room_edit">Edit Room</string>
+    <string name="title_activity_room_overview">Room Overview</string>
     <string name="timetable">Timetable</string>
     <string name="teacher">Teacher</string>
     <string name="teacher_caption">Caption</string>
@@ -64,4 +68,8 @@
     <string name="to">To</string>
     <string name="unknown_error_occurred">An unknown error occurred.</string>
     <string name="version">Version</string>
+    <string name="cc_buttonLeft">&lt;</string>
+    <string name="cc_buttonEnd">&gt;</string>
+    <string name="daysOfWeek">daysOfWeek</string>
+
 </resources>
