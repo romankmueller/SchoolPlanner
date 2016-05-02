@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +31,9 @@ import java.util.UUID;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import ch.bzs_surselva.schoolplanner.adapters.DaySpinnerAdapter;
 import ch.bzs_surselva.schoolplanner.adapters.SubjectOverviewAdapter;
+import ch.bzs_surselva.schoolplanner.dto.DayLookupDto;
 import ch.bzs_surselva.schoolplanner.dto.ResultDto;
 import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.CredentialHelper;
@@ -152,6 +155,24 @@ public class MainActivity extends AppCompatActivity {
                             }
                         })
                 .show();
+    }
+
+    private Spinner spinner;
+    private DaySpinnerAdapter adapter;
+
+    private void refreshDays()
+    {
+        this.adapter = new DaySpinnerAdapter(this, new ArrayList<DayLookupDto>());
+        this.spinner.setAdapter(this.adapter);
+
+        ArrayList<DayLookupDto> data = this.loadDayLookupData();
+        this.adapter.addAll(data);
+        this.adapter.notifyDataSetChanged();
+    }
+
+    private ArrayList<DayLookupDto> loadDayLookupData()
+    {
+        return new ArrayList<DayLookupDto>();
     }
 
     public class LoginTask extends AsyncTask<Void, Void, Boolean> {
