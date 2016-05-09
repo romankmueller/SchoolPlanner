@@ -64,6 +64,41 @@ namespace Bzs.Server.ServerService
         }
 
         /// <summary>
+        /// Returns the lessons of a day to display.
+        /// </summary>
+        /// <param name="dayId">The day identifier.</param>
+        /// <param name="accountId">The account identifier.</param>
+        /// <returns>The lessons of a day.</returns>
+        public List<LessonDisplayDto> GetLessonsOfDayToDisplay(Guid dayId, Guid accountId)
+        {
+            List<LessonDisplayDto> data = new List<LessonDisplayDto>();
+            using (BzsEntityContainer ctx = this.CreateContainer())
+            {
+                IQueryable<LessonEntity> entities = ctx.LessonSet.Where(f => f.DayId == dayId && f.AccountId == accountId);
+                foreach (LessonEntity entity in entities)
+                {
+                    LessonDisplayDto item = new LessonDisplayDto();
+                    item.Id = entity.Id;
+                    item.DayId = entity.DayId;
+                    item.DayCaption = entity.DayNavProp.Caption;
+                    item.FromDate = DateTimeHelper.DateTimeToString(entity.FromDate);
+                    item.ToDate = DateTimeHelper.DateTimeToString(entity.ToDate);
+                    item.SubjectCode = entity.SubjectNavProp.Code;
+                    item.SubjectCaption = entity.SubjectNavProp.Caption;
+                    item.TeacherCode = entity.TeacherNavProp.Code;
+                    item.TeacherCaption = entity.TeacherNavProp.Caption;
+                    item.RoomCode = entity.RoomNavProp.Code;
+                    item.RoomCaption = entity.RoomNavProp.Caption;
+                    item.Remark = entity.Remark;
+
+                    data.Add(item);
+                }
+            }
+
+            return data;
+        } 
+
+        /// <summary>
         /// Returns the lessons of the week.
         /// </summary>
         /// <param name="accountId">The account identifier.</param>

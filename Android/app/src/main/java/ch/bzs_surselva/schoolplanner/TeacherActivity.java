@@ -33,8 +33,6 @@ import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
  */
 public class TeacherActivity extends AppCompatActivity
 {
-
-
         private EditText editTextCode;
         private EditText editTextCaption;
         private TeacherDto model;
@@ -42,7 +40,6 @@ public class TeacherActivity extends AppCompatActivity
 
 
         @Override
-
         protected void onCreate(Bundle savedInstanceState)
         {
             super.onCreate(savedInstanceState);
