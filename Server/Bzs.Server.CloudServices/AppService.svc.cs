@@ -326,6 +326,23 @@ namespace Bzs.Server.CloudServices
         }
 
         /// <summary>
+        /// Returns the lesson of a day to display.
+        /// </summary>
+        /// <param name="id">The day identifier.</param>
+        /// <returns>The lessons.</returns>
+        public List<LessonDisplayDto> GetLessonOfDayToDisplay(string id)
+        {
+            this.SetResponseHeaderCacheExpiration();
+
+            AccountPassword credentials = this.GetCredentialsFromRequest();
+            AccountServerService accountService = new AccountServerService();
+            Guid accountId = accountService.GetAccountId(credentials.Account);
+
+            LessonServerService service = new LessonServerService();
+            return service.GetLessonsOfDayToDisplay(new Guid(id), accountId);
+        } 
+
+        /// <summary>
         /// Returns the lessons of a week.
         /// </summary>
         /// <returns>The lessons.</returns>

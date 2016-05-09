@@ -47,6 +47,7 @@
     <Compile Include="DataTransferObjects\Authentication\LoginResultDto.cs" />
     <Compile Include="DataTransferObjects\Account\RegisterDto.cs" />
     <Compile Include="DataTransferObjects\Base\ResultDto.cs" />
+    <Compile Include="DataTransferObjects\Lesson\LessonDisplayDto.cs" />
     <Compile Include="DataTransferObjects\Lesson\LessonEditDto.cs" />
     <Compile Include="DataTransferObjects\Room\RoomEditDto.cs" />
     <Compile Include="DataTransferObjects\Room\RoomLookupDto.cs" />

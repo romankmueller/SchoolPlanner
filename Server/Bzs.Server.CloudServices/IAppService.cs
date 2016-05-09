@@ -183,6 +183,15 @@ namespace Bzs.Server.CloudServices
         List<LessonEditDto> GetLessonOfDay(string id);
 
         /// <summary>
+        /// Returns the lesson of a day to display.
+        /// </summary>
+        /// <param name="id">The day identifier.</param>
+        /// <returns>The lessons.</returns>
+        [WebGet(UriTemplate = "GetLessonOfDayToDisplay/{id}", ResponseFormat = WebMessageFormat.Json)]
+        [OperationContract]
+        List<LessonDisplayDto> GetLessonOfDayToDisplay(string id);
+
+        /// <summary>
         /// Returns the lessons of a week.
         /// </summary>
         /// <returns>The lessons.</returns>
