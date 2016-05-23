@@ -7,14 +7,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +27,11 @@ import java.util.Comparator;
 import javax.net.ssl.HttpsURLConnection;
 
 import ch.bzs_surselva.schoolplanner.dto.DayLookupDto;
+import ch.bzs_surselva.schoolplanner.dto.LessonDto;
+import ch.bzs_surselva.schoolplanner.dto.ResultDto;
 import ch.bzs_surselva.schoolplanner.dto.RoomLookupDto;
 import ch.bzs_surselva.schoolplanner.dto.SubjectLookupDto;
+import ch.bzs_surselva.schoolplanner.dto.TeacherDto;
 import ch.bzs_surselva.schoolplanner.dto.TeacherLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
@@ -37,6 +44,9 @@ public class LessonActivity extends AppCompatActivity {
     private Spinner spinnerSubject;
     private Spinner spinnerTeacher;
     private Spinner spinnerRoom;
+    private EditText EditTextRemark;
+    private LessonDto model;
+    private SaveTask saveTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +57,7 @@ public class LessonActivity extends AppCompatActivity {
         this.spinnerSubject = (Spinner) this.findViewById(R.id.spinnerSubject);
         this.spinnerTeacher = (Spinner) this.findViewById(R.id.spinnerTeacher);
         this.spinnerRoom = (Spinner) this.findViewById(R.id.spinnerRoom);
+        this.EditTextRemark = (EditText) this.findViewById(R.id.editTextRemark);
 
         this.loadDayLookupTask = new LoadDayLookupTask();
         this.loadDayLookupTask.execute((Void) null);
@@ -59,7 +70,7 @@ public class LessonActivity extends AppCompatActivity {
 
         this.loadRoomLookupTask = new LoadRoomLookupTask();
         this.loadRoomLookupTask.execute((Void) null);
-}
+    }
 
 
     @Override
@@ -73,14 +84,41 @@ public class LessonActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_save) {
-            return true;
-        }
-
-        if (id == R.id.action_delete) {
+            this.saveChanges();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveChanges() {
+        LessonDto itemToSave;
+        if (this.model == null) {
+            itemToSave = new LessonDto();
+        } else {
+            itemToSave = this.model;
+        }
+
+
+        itemToSave = this.applyChanges(itemToSave);
+        if (this.model == null) {
+            this.saveTask = new SaveTask(itemToSave, "I");
+        } else {
+            this.saveTask = new SaveTask(itemToSave, "U");
+        }
+
+        this.saveTask.execute((Void) null);
+    }
+
+    private LessonDto applyChanges(LessonDto itemToSave) {
+        SubjectLookupDto Subject = (SubjectLookupDto)this.spinnerSubject.getItemAtPosition(this.spinnerSubject.getSelectedItemPosition());
+        itemToSave.setSubject(Subject.getId().toString());
+        TeacherLookupDto Teacher = (TeacherLookupDto)this.spinnerTeacher.getItemAtPosition(this.spinnerTeacher.getSelectedItemPosition());
+        itemToSave.setTeacher(Teacher.getId().toString());
+        RoomLookupDto Room = (RoomLookupDto)this.spinnerRoom.getItemAtPosition(this.spinnerRoom.getSelectedItemPosition());
+        itemToSave.setRoom(Room.getId().toString());
+        itemToSave.setRemark(this.EditTextRemark.getText().toString());
+        return itemToSave;
     }
 
 
@@ -346,15 +384,11 @@ public class LessonActivity extends AppCompatActivity {
         }
 
 
-
-
         @Override
         protected void onCancelled() {
             Object loadRoomLookupTask = null;
             this.dialog.dismiss();
         }
-
-
 
 
     }
@@ -426,6 +460,134 @@ public class LessonActivity extends AppCompatActivity {
         protected void onCancelled() {
             loadRoomLookupTask = null;
             this.dialog.dismiss();
+
+
         }
+
+    }
+
+    public class SaveTask extends AsyncTask<Void, Void, Boolean> {
+        private final LessonDto itemToSave;
+        private final String insertUpdate;
+        private ProgressDialog dialog;
+        private String content;
+
+        public SaveTask(LessonDto itemToSave, String insertUpdate) {
+            this.itemToSave = itemToSave;
+            if (!insertUpdate.equals("I") && !insertUpdate.equals("U")) {
+                throw new IllegalArgumentException("insertUpdate is not 'I' or 'U'.");
+            }
+
+            this.insertUpdate = insertUpdate;
+            this.dialog = new ProgressDialog(LessonActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute()
+        {
+            this.dialog.setMessage(getString(R.string.please_wait));
+            this.dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params)
+        {
+            String service = "InsertTeacher";
+            String method = "PUT";
+            if (insertUpdate == "U")
+            {
+                service = "UpdateTeacher";
+                method = "POST";
+            }
+
+            try
+            {
+                HttpsURLConnection connection = RequestHelper.createRequest(service, method);
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+                OutputStream stream = connection.getOutputStream();
+                DataOutputStream wr = new DataOutputStream(stream);
+                wr.writeBytes(this.itemToSave.toJson().toString());
+                wr.flush();
+                wr.close();
+                int status = connection.getResponseCode();
+                if (status == 200 || status == 201)
+                {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null)
+                    {
+                        sb.append(line).append("\n");
+                    }
+
+                    br.close();
+                    this.content = sb.toString();
+                    return true;
+                }
+            }
+            catch (MalformedURLException e)
+            {
+                return false;
+            }
+            catch (NullPointerException e)
+            {
+                return false;
+            }
+            catch (IOException e)
+            {
+                return false;
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success)
+        {
+            saveTask = null;
+            this.dialog.dismiss();
+
+            if (success)
+            {
+                try
+                {
+                    JSONObject json = new JSONObject(this.content);
+                    ResultDto result = new ResultDto(json);
+                    if (result.getSuccess())
+                    {
+                        finish();
+                    }
+                    else
+                    {
+                        displaySaveAlert(result.getError());
+                    }
+                }
+                catch (JSONException e)
+                {
+                    displaySaveAlert(getString(R.string.unknown_error_occurred));
+                }
+            }
+            else
+            {
+                displaySaveAlert(getString(R.string.unknown_error_occurred));
+            }
+        }
+
+        private void displaySaveAlert(String error) {
+
+        }
+
+
+        @Override
+        protected void onCancelled()
+        {
+            saveTask = null;
+            this.dialog.dismiss();
+        }
+
     }
 }
+
+
