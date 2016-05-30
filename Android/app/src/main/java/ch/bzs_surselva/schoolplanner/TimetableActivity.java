@@ -32,6 +32,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -46,8 +50,7 @@ import ch.bzs_surselva.schoolplanner.dto.SubjectEditDto;
 import ch.bzs_surselva.schoolplanner.dto.TeacherLookupDto;
 import ch.bzs_surselva.schoolplanner.helpers.RequestHelper;
 
-public class TimetableActivity extends AppCompatActivity
-{
+public class TimetableActivity extends AppCompatActivity {
     private LoadTask loadTask;
     private LessonOverviewAdapter adapter;
     private AlertDialog.Builder alertBuilder;
@@ -59,8 +62,7 @@ public class TimetableActivity extends AppCompatActivity
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_timetable);
         this.datum = Calendar.getInstance();
@@ -68,167 +70,167 @@ public class TimetableActivity extends AppCompatActivity
         ArrayList<LessonDisplayDto> data = new ArrayList<>();
         this.adapter = new LessonOverviewAdapter(this, data);
         ListView listViewLesson = (ListView) findViewById(R.id.listViewLesson);
-        this.textViewDay = (TextView)findViewById(R.id.textViewDay);
+        this.textViewDay = (TextView) findViewById(R.id.textViewDay);
         String text = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
         this.textViewDay.setText(text);
         listViewLesson.setAdapter(this.adapter);
-       /* listViewLesson.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listViewLesson.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3)
-            {
+            public void onItemClick(AdapterView<?> adapter, View v, int position, long arg3) {
                 LessonDisplayDto value = (LessonDisplayDto) adapter.getItemAtPosition(position);
-                editLesson(value.getId());
+                 editLesson(value.getId());
             }
-        });*/
+        });
 
         this.alertBuilder = new AlertDialog.Builder(this);
         this.alertBuilder.setMessage(this.getString(R.string.cc_would_you_like_to_delete_the_lesson));
-        this.alertBuilder.setPositiveButton(this.getString(R.string.cc_yes), new DialogInterface.OnClickListener()
-        {
+        this.alertBuilder.setPositiveButton(this.getString(R.string.cc_yes), new DialogInterface.OnClickListener() {
             @Override
-           public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 deleteLesson(deleteId);
                 deleteId = null;
             }
 
-            });
-            this.alertBuilder.setNegativeButton(this.getString(R.string.cc_no),new DialogInterface.OnClickListener()
-            {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    deleteId = null;
-                }
-            });
-
-                listViewLesson.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener()
-                {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> parent, View view, int arg2, long arg3)
-                    {
-                        LessonDisplayDto item = (LessonDisplayDto) parent.getItemAtPosition(arg2);
-                        deleteId = item.getId();
-                        AlertDialog dlg = alertBuilder.create();
-                        dlg.show();
-                        return true;
-                    }
-                });
-
-            }
-
-
+        });
+        this.alertBuilder.setNegativeButton(this.getString(R.string.cc_no), new DialogInterface.OnClickListener() {
             @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                deleteId = null;
+            }
+        });
+
+        listViewLesson.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int arg2, long arg3) {
+                LessonDisplayDto item = (LessonDisplayDto) parent.getItemAtPosition(arg2);
+                deleteId = item.getId();
+                AlertDialog dlg = alertBuilder.create();
+                dlg.show();
+                return true;
+            }
+        });
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         this.getMenuInflater().inflate(R.menu.menu_timetable, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_new)
-        {
-           this.createLesson();
+        if (id == R.id.action_new) {
+            this.createLesson();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void OnClickLeftButton (View v)
-    {
+    public void OnClickLeftButton(View v) {
         this.datum.add(Calendar.DAY_OF_WEEK, -1);
-        String text = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+        String text = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.GERMAN);
         this.textViewDay.setText(text);
+        this.refreshData();
     }
-    public void OnClickRightButton (View v)
-    {
+
+    public void OnClickRightButton(View v) {
         this.datum.add(Calendar.DAY_OF_WEEK, +1);
-        String text = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+        String text = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.GERMAN);
         this.textViewDay.setText(text);
+        this.refreshData();
     }
+
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
         this.refreshData();
     }
 
-    private void refreshData()
-    {
-        this.loadTask = new LoadTask();
+    private void refreshData() {
+
+
+        HashMap<String, String> hm = new HashMap<String, String>();
+        hm.put("Monday","MO");
+        hm.put("Tuesday", "DI");
+        hm.put("Wednesday", "MI");
+        hm.put("Thursday", "DO");
+        hm.put("Friday", "FR");
+        hm.put("Saturday","SA");
+        hm.put("Sunday", "SO");
+
+        String tag = datum.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.ENGLISH);
+
+        String tagAbkuerzung = hm.get(tag);
+
+
+        this.loadTask = new LoadTask(tagAbkuerzung);
         this.loadTask.execute((Void) null);
     }
 
-    private void didLoadModel(ArrayList<LessonDisplayDto> loadedData){
+    private void didLoadModel(ArrayList<LessonDisplayDto> loadedData) {
 
         this.adapter.clear();
         this.adapter.addAll(loadedData);
         this.adapter.notifyDataSetChanged();
 
     }
-            private void createLesson()
-            {
-                Intent intent = new Intent(this, LessonActivity.class);
-                this.startActivity(intent);
-            }
 
-    private void editLesson(UUID lessonId, String subject)
-    {
+    private void createLesson() {
         Intent intent = new Intent(this, LessonActivity.class);
-        intent.putExtra("Id", lessonId.toString());
-        intent.putExtra("Subject", subject);
         this.startActivity(intent);
     }
-            private void deleteLesson(UUID id)
-            {
-                this.deleteTask = new DeleteTask(id);
-                this.deleteTask.execute((Void) null);
-            }
 
-            private void didDeleteModel()
-            {
-                this.refreshData();
-            }
+    private void editLesson(UUID id) {
+        Intent intent = new Intent(this, LessonActivity.class);
+        intent.putExtra("Id", id.toString());
 
-    public class LoadTask extends AsyncTask<Void, Void, Boolean>
-    {
+        this.startActivity(intent);
+    }
+
+    private void deleteLesson(UUID id) {
+        this.deleteTask = new DeleteTask(id);
+        this.deleteTask.execute((Void) null);
+    }
+
+    private void didDeleteModel() {
+        this.refreshData();
+    }
+
+    public class LoadTask extends AsyncTask<Void, Void, Boolean> {
         private ProgressDialog dialog;
         private String content;
+        private String tag;
 
-        public LoadTask()
-        {
+        public LoadTask(String tag) {
+            this.tag = tag;
             this.dialog = new ProgressDialog(TimetableActivity.this);
         }
 
         @Override
-        protected void onPreExecute()
-        {
+        protected void onPreExecute() {
             this.dialog.setMessage(getString(R.string.please_wait));
             this.dialog.show();
         }
 
         @Override
-        protected Boolean doInBackground(Void... params)
-        {
-            try
-            {
-                HttpsURLConnection connection = RequestHelper.createRequest("GetLessonDto", "GET");
+        protected Boolean doInBackground(Void... params) {
+            try {
+                HttpsURLConnection connection = RequestHelper.createRequest("GetLessonOfDayToDisplay/" + tag, "GET");
                 connection.setRequestProperty("Accept", "application/json");
                 connection.connect();
                 int status = connection.getResponseCode();
-                if (status == 200 || status == 201)
-                {
+                if (status == 200 || status == 201) {
                     BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     StringBuilder sb = new StringBuilder();
                     String line;
-                    while ((line = br.readLine()) != null)
-                    {
+                    while ((line = br.readLine()) != null) {
                         sb.append(line).append("\n");
                     }
 
@@ -236,17 +238,11 @@ public class TimetableActivity extends AppCompatActivity
                     this.content = sb.toString();
                     return true;
                 }
-            }
-            catch (MalformedURLException e)
-            {
+            } catch (MalformedURLException e) {
                 return false;
-            }
-            catch (NullPointerException e)
-            {
+            } catch (NullPointerException e) {
                 return false;
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 return false;
             }
 
@@ -254,25 +250,18 @@ public class TimetableActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onPostExecute(final Boolean success)
-        {
+        protected void onPostExecute(final Boolean success) {
             loadTask = null;
             this.dialog.dismiss();
 
-            ArrayList<LessonDisplayDto> loadedData = new ArrayList<LessonDisplayDto>();
-            if (success)
-            {
-
-                try
-                {
+            ArrayList<LessonDisplayDto> loadedData = new ArrayList<>();
+            if (success) {
+                try {
                     JSONArray json = new JSONArray(this.content);
-                    for (int i = 0; i < json.length(); i++)
-                    {
+                    for (int i = 0; i < json.length(); i++) {
                         loadedData.add(new LessonDisplayDto(json.getJSONObject(i)));
                     }
-                }
-                catch (JSONException e)
-                {
+                } catch (JSONException e) {
                 }
             }
            /* Collections.sort(loadedData, new Comparator<LessonDisplayDto>() {
@@ -285,111 +274,91 @@ public class TimetableActivity extends AppCompatActivity
         }
 
         @Override
-        protected void onCancelled()
-        {
+        protected void onCancelled() {
             loadTask = null;
             this.dialog.dismiss();
         }
     }
 
-            public class DeleteTask extends AsyncTask<Void, Void, Boolean>
-            {
-                private UUID idToDelete;
-                private ProgressDialog dialog;
-                private String content;
+    public class DeleteTask extends AsyncTask<Void, Void, Boolean> {
+        private UUID idToDelete;
+        private ProgressDialog dialog;
+        private String content;
 
-                public DeleteTask(UUID idToDelete)
-                {
-                    this.idToDelete = idToDelete;
-                    this.dialog = new ProgressDialog(TimetableActivity.this);
+        public DeleteTask(UUID idToDelete) {
+            this.idToDelete = idToDelete;
+            this.dialog = new ProgressDialog(TimetableActivity.this);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            this.dialog.setMessage(getString(R.string.please_wait));
+            this.dialog.show();
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                HttpsURLConnection connection = RequestHelper.createRequest("DeleteLesson", "DELETE");
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("Accept", "application/json");
+                connection.setDoOutput(true);
+                OutputStream stream = connection.getOutputStream();
+                DataOutputStream wr = new DataOutputStream(stream);
+                String json = new IdDto(this.idToDelete).toJson().toString();
+                wr.writeBytes(json);
+                wr.flush();
+                wr.close();
+
+                int status = connection.getResponseCode();
+                if (status == 200 || status == 201) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+
+                    br.close();
+                    this.content = sb.toString();
+                    return true;
                 }
+            } catch (MalformedURLException e) {
+                return false;
+            } catch (NullPointerException e) {
+                return false;
+            } catch (IOException e) {
+                return false;
+            }
 
-                @Override
-                protected void onPreExecute()
-                {
-                    this.dialog.setMessage(getString(R.string.please_wait));
-                    this.dialog.show();
-                }
+            return false;
+        }
 
-                @Override
-                protected Boolean doInBackground(Void... params)
-                {
-                    try
-                    {
-                        HttpsURLConnection connection = RequestHelper.createRequest("DeleteLesson","DELETE");
-                        connection.setRequestProperty("Content-Type", "application/json");
-                        connection.setRequestProperty("Accept", "application/json");
-                        connection.setDoOutput(true);
-                        OutputStream stream = connection.getOutputStream();
-                        DataOutputStream wr = new DataOutputStream(stream);
-                        String json = new IdDto( this.idToDelete).toJson().toString();
-                        wr.writeBytes(json);
-                        wr.flush();
-                        wr.close();
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            deleteTask = null;
+            this.dialog.dismiss();
 
-                        int status = connection.getResponseCode();
-                        if (status == 200 || status == 201)
-                        {
-                            BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                            StringBuilder sb = new StringBuilder();
-                            String line;
-                            while ((line = br.readLine()) != null)
-                            {
-                                sb.append(line).append("\n");
-                            }
+            if (success) {
+                try {
+                    JSONObject json = new JSONObject(this.content);
+                    if (json.getBoolean("Success") == false) {
+                        refreshData();
 
-                            br.close();
-                            this.content = sb.toString();
-                            return true;
-                        }
-                    }
-                    catch (MalformedURLException e)
-                    {
-                        return false;
-                    }
-                    catch (NullPointerException e)
-                    {
-                        return false;
-                    }
-                    catch (IOException e)
-                    {
-                        return false;
+                        //json.getString("Error");
                     }
 
-                    return false;
-                }
-
-                @Override
-                protected void onPostExecute(final Boolean success)
-                {
-                    deleteTask = null;
-                    this.dialog.dismiss();
-
-                    if (success)
-                    {
-                        try {
-                            JSONObject json = new JSONObject(this.content);
-                            if (json.getBoolean("Success") == false)
-                            {
-                                refreshData();
-
-                                //json.getString("Error");
-                            }
-
-                        }
-                        catch (JSONException e)
-                        {
-                        }
-                    }
-
-                    didDeleteModel();
-                }
-
-                @Override
-                protected void onCancelled()
-                {
-                    deleteTask = null;
-                    this.dialog.dismiss();
+                } catch (JSONException e) {
                 }
             }
+
+            didDeleteModel();
         }
+
+        @Override
+        protected void onCancelled() {
+            deleteTask = null;
+            this.dialog.dismiss();
+        }
+    }
+}

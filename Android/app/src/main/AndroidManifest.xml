@@ -54,6 +54,9 @@
             android:name=".LessonActivity"
             android:label="@string/title_activity_lesson"
             android:parentActivityName=".TimetableActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="ch.bzs_surselva.schoolplanner.TimetableActivity" />
         </activity>
         <activity
             android:name=".SubjectEditActivity"
