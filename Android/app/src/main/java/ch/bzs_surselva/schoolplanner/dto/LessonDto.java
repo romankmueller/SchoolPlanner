@@ -3,23 +3,22 @@ package ch.bzs_surselva.schoolplanner.dto;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.Date;
-import java.util.UUID;
-
 import ch.bzs_surselva.schoolplanner.helpers.StringHelper;
 
 public final class LessonDto extends ItemDtoBase
 {
-   /* private static final String JsonDayOfWeek = "DayOfWeek";
-    private static final String JsonFrom = "From";
-    private static final String JsonTo = "To";*/
-    private static final String JsonSubject = "Subject";
-    private static final String JsonTeacher = "Teacher";
-    private static final String JsonRoom = "Room";
+    private static final String JsonDayId = "DayId";
+    private static final String JsonFromDate = "FromDate";
+    private static final String JsonToDate = "ToDate";
+    private static final String JsonSubjectId = "SubjectId";
+    private static final String JsonTeacherId = "TeacherId";
+    private static final String JsonRoomId = "RoomId";
     private static final String JsonRemark = "Remark";
+    private static final String JsonDayCaption = "DayCaption";
 
-   // private int dayOfWeek;
-   // private Date from;
-    //private Date to;
+    private int dayOfWeek;
+    private Date from;
+    private Date to;
     private String subject;
     private String teacher;
     private String room;
@@ -28,38 +27,25 @@ public final class LessonDto extends ItemDtoBase
     public LessonDto()
     {
         super();
-        //this.dayOfWeek = 0;
-       // this.from = new Date();
-        //this.to = new Date();
+
+        this.dayOfWeek = 0;
+        this.from = new Date();
+        this.to = new Date();
         this.subject = "";
         this.teacher = "";
         this.room = "";
         this.remark = "";
-
-    }
-
-    public LessonDto(UUID id,/* String dayOfWeek, String from, String to,*/ String subject, String teacher, String room, String remark)
-    {
-        super(id);
-
-        //this.setDayOfWeek(dayOfWeek);
-       // this.from = new Date();
-       // this.setTo( new Date());
-        this.setSubject(subject);
-        this.setTeacher(teacher);
-        this.setRoom(room);
-        this.setRemark(remark);
     }
 
     public LessonDto(JSONObject json)
     {
-        super(json);
+        this();
 
         try
         {
-            this.setSubject(json.getString(JsonSubject));
-            this.setTeacher(json.getString(JsonTeacher));
-            this.setRoom(json.getString(JsonRoom));
+            this.setSubject(json.getString(JsonSubjectId));
+            this.setTeacher(json.getString(JsonTeacherId));
+            this.setRoom(json.getString(JsonRoomId));
             this.setRemark(json.getString(JsonRemark));
         }
         catch (JSONException e)
@@ -112,12 +98,12 @@ public final class LessonDto extends ItemDtoBase
         JSONObject json = super.toJson();
         try
         {
-           // json.put(JsonDayOfWeek, this.dayOfWeek);
-           // json.put(JsonFrom, this.from);
-           // json.put(JsonTo, this.to);
-            json.put(JsonSubject, this.getSubject());
-            json.put(JsonTeacher, this.getTeacher());
-            json.put(JsonRoom, this.getRoom());
+            json.put(JsonDayId, this.dayOfWeek);
+            json.put(JsonFromDate, this.from);
+            json.put(JsonToDate, this.to);
+            json.put(JsonSubjectId, this.getSubject());
+            json.put(JsonTeacherId, this.getTeacher());
+            json.put(JsonRoomId, this.getRoom());
             json.put(JsonRemark, this.getRemark());
         }
         catch (JSONException e)
